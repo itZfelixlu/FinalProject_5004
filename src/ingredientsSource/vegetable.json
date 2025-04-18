@@ -1,0 +1,152 @@
+[
+  {
+    "name": "Broccoli",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 34,
+    "pricePerUnit": 2.49,
+    "category": "vegetable",
+    "cookingMethod": "raw",
+    "description": "Nutritious green florets - high in vitamin C and fiber"
+  },
+  {
+    "name": "Spinach",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 23,
+    "pricePerUnit": 3.29,
+    "category": "vegetable",
+    "cookingMethod": "raw",
+    "description": "Dark leafy green - rich in iron and antioxidants"
+  },
+  {
+    "name": "Kale",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 49,
+    "pricePerUnit": 3.49,
+    "category": "vegetable",
+    "cookingMethod": "raw",
+    "description": "Hearty dark green leaf - packed with nutrients and antioxidants"
+  },
+  {
+    "name": "Carrot",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 41,
+    "pricePerUnit": 1.79,
+    "category": "vegetable",
+    "cookingMethod": "raw",
+    "description": "Sweet orange root vegetable - high in beta-carotene"
+  },
+  {
+    "name": "Bell Pepper",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 31,
+    "pricePerUnit": 3.99,
+    "category": "vegetable",
+    "cookingMethod": "raw",
+    "description": "Colorful sweet pepper - excellent source of vitamin C"
+  },
+  {
+    "name": "Potato",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 77,
+    "pricePerUnit": 1.29,
+    "category": "vegetable",
+    "cookingMethod": "raw",
+    "description": "Starchy root vegetable - versatile staple food"
+  },
+  {
+    "name": "Sweet Potato",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 86,
+    "pricePerUnit": 2.19,
+    "category": "vegetable",
+    "cookingMethod": "raw",
+    "description": "Orange-fleshed root - high in vitamins A and fiber"
+  },
+  {
+    "name": "Onion",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 40,
+    "pricePerUnit": 1.59,
+    "category": "vegetable",
+    "cookingMethod": "raw",
+    "description": "Aromatic bulb - foundation of many dishes"
+  },
+  {
+    "name": "Garlic",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 149,
+    "pricePerUnit": 5.99,
+    "category": "vegetable",
+    "cookingMethod": "raw",
+    "description": "Potent aromatic bulb - used as seasoning with health benefits"
+  },
+  {
+    "name": "Tomato",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 18,
+    "pricePerUnit": 3.49,
+    "category": "vegetable",
+    "cookingMethod": "raw",
+    "description": "Juicy red fruit often used as vegetable - rich in lycopene"
+  },
+  {
+    "name": "Cucumber",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 15,
+    "pricePerUnit": 2.29,
+    "category": "vegetable",
+    "cookingMethod": "raw",
+    "description": "Crisp, water-rich vegetable - refreshing with high water content"
+  },
+  {
+    "name": "Zucchini",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 17,
+    "pricePerUnit": 2.69,
+    "category": "vegetable",
+    "cookingMethod": "raw",
+    "description": "Mild green summer squash - versatile with low calorie content"
+  },
+  {
+    "name": "Cauliflower",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 25,
+    "pricePerUnit": 3.19,
+    "category": "vegetable",
+    "cookingMethod": "raw",
+    "description": "White cruciferous vegetable - low-carb alternative to grains"
+  },
+  {
+    "name": "Mushrooms",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 22,
+    "pricePerUnit": 4.59,
+    "category": "vegetable",
+    "cookingMethod": "raw",
+    "description": "Edible fungi - umami flavor with meaty texture"
+  },
+  {
+    "name": "Eggplant",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 25,
+    "pricePerUnit": 2.99,
+    "category": "vegetable",
+    "cookingMethod": "raw",
+    "description": "Purple-skinned vegetable - absorbent texture ideal for various cuisines"
+  }
+]

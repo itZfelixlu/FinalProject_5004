@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Whole Milk",
+    "quantity": 1,
+    "unit": "100ml",
+    "caloriesPerUnit": 61,
+    "pricePerUnit": 0.89,
+    "category": "dairy",
+    "cookingMethod": "raw",
+    "description": "Full-fat cow's milk with approximately 3.25% fat content - complete protein source"
+  },
+  {
+    "name": "Cheddar Cheese",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 402,
+    "pricePerUnit": 8.99,
+    "category": "dairy",
+    "cookingMethod": "raw",
+    "description": "Aged, firm cow's milk cheese - rich in calcium and protein"
+  },
+  {
+    "name": "Greek Yogurt",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 59,
+    "pricePerUnit": 1.59,
+    "category": "dairy",
+    "cookingMethod": "raw",
+    "description": "Strained yogurt with higher protein content - probiotic-rich"
+  },
+  {
+    "name": "Butter",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 717,
+    "pricePerUnit": 6.49,
+    "category": "dairy",
+    "cookingMethod": "raw",
+    "description": "Concentrated milk fat - used primarily for cooking and baking"
+  },
+  {
+    "name": "Eggs",
+    "quantity": 1,
+    "unit": "large egg",
+    "caloriesPerUnit": 72,
+    "pricePerUnit": 0.49,
+    "category": "dairy",
+    "cookingMethod": "raw",
+    "description": "Chicken eggs - complete protein source with essential nutrients"
+  }
+]

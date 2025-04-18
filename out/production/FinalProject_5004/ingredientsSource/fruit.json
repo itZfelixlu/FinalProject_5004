@@ -1,0 +1,102 @@
+[
+  {
+    "name": "Apple",
+    "quantity": 1,
+    "unit": "medium (182g)",
+    "caloriesPerUnit": 95,
+    "pricePerUnit": 1.29,
+    "category": "fruit",
+    "cookingMethod": "raw",
+    "description": "Crisp, sweet-tart fruit - high in fiber and vitamin C"
+  },
+  {
+    "name": "Banana",
+    "quantity": 1,
+    "unit": "medium (118g)",
+    "caloriesPerUnit": 105,
+    "pricePerUnit": 0.69,
+    "category": "fruit",
+    "cookingMethod": "raw",
+    "description": "Sweet, soft tropical fruit - excellent source of potassium"
+  },
+  {
+    "name": "Orange",
+    "quantity": 1,
+    "unit": "medium (131g)",
+    "caloriesPerUnit": 62,
+    "pricePerUnit": 1.19,
+    "category": "fruit",
+    "cookingMethod": "raw",
+    "description": "Juicy citrus fruit - packed with vitamin C and antioxidants"
+  },
+  {
+    "name": "Strawberries",
+    "quantity": 1,
+    "unit": "cup (152g)",
+    "caloriesPerUnit": 49,
+    "pricePerUnit": 3.99,
+    "category": "fruit",
+    "cookingMethod": "raw",
+    "description": "Bright red berries - low in calories, high in vitamin C"
+  },
+  {
+    "name": "Blueberries",
+    "quantity": 1,
+    "unit": "cup (148g)",
+    "caloriesPerUnit": 84,
+    "pricePerUnit": 4.49,
+    "category": "fruit",
+    "cookingMethod": "raw",
+    "description": "Small dark berries - packed with antioxidants and phytoflavinoids"
+  },
+  {
+    "name": "Avocado",
+    "quantity": 1,
+    "unit": "medium (150g)",
+    "caloriesPerUnit": 240,
+    "pricePerUnit": 2.49,
+    "category": "fruit",
+    "cookingMethod": "raw",
+    "description": "Creamy, fatty fruit - rich in healthy monounsaturated fats"
+  },
+  {
+    "name": "Pineapple",
+    "quantity": 1,
+    "unit": "cup chunks (165g)",
+    "caloriesPerUnit": 82,
+    "pricePerUnit": 3.99,
+    "category": "fruit",
+    "cookingMethod": "raw",
+    "description": "Sweet tropical fruit - contains enzyme bromelain that aids digestion"
+  },
+  {
+    "name": "Watermelon",
+    "quantity": 1,
+    "unit": "cup diced (152g)",
+    "caloriesPerUnit": 46,
+    "pricePerUnit": 0.99,
+    "category": "fruit",
+    "cookingMethod": "raw",
+    "description": "Refreshing summer fruit - 92% water content, hydrating and low calorie"
+  },
+  {
+    "name": "Grapes",
+    "quantity": 1,
+    "unit": "cup (151g)",
+    "caloriesPerUnit": 104,
+    "pricePerUnit": 3.49,
+    "category": "fruit",
+    "cookingMethod": "raw",
+    "description": "Small, sweet berries - contain resveratrol and other antioxidants"
+  },
+  {
+    "name": "Mango",
+    "quantity": 1,
+    "unit": "medium (207g)",
+    "caloriesPerUnit": 201,
+    "pricePerUnit": 2.29,
+    "category": "fruit",
+    "cookingMethod": "raw",
+    "description": "Sweet tropical fruit - rich in vitamins A and C"
+  }
+]

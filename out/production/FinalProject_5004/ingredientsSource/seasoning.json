@@ -1,0 +1,102 @@
+[
+  {
+    "name": "Salt",
+    "quantity": 1,
+    "unit": "tablespoon (18g)",
+    "caloriesPerUnit": 0,
+    "pricePerUnit": 0.05,
+    "category": "seasoning",
+    "cookingMethod": "raw",
+    "description": "Basic mineral seasoning - enhances flavor and preserves food"
+  },
+  {
+    "name": "Black Pepper",
+    "quantity": 1,
+    "unit": "tablespoon (6g)",
+    "caloriesPerUnit": 17,
+    "pricePerUnit": 0.30,
+    "category": "seasoning",
+    "cookingMethod": "raw",
+    "description": "Pungent spice from peppercorn berries - adds heat and complexity"
+  },
+  {
+    "name": "Olive Oil",
+    "quantity": 1,
+    "unit": "tablespoon (14g)",
+    "caloriesPerUnit": 119,
+    "pricePerUnit": 0.45,
+    "category": "seasoning",
+    "cookingMethod": "raw",
+    "description": "Mediterranean oil from olives - used for cooking, dressing, marinades"
+  },
+  {
+    "name": "Soy Sauce",
+    "quantity": 1,
+    "unit": "tablespoon (15ml)",
+    "caloriesPerUnit": 9,
+    "pricePerUnit": 0.20,
+    "category": "seasoning",
+    "cookingMethod": "raw",
+    "description": "Fermented soybean condiment - adds umami and saltiness"
+  },
+  {
+    "name": "Vinegar",
+    "quantity": 1,
+    "unit": "tablespoon (15ml)",
+    "caloriesPerUnit": 3,
+    "pricePerUnit": 0.10,
+    "category": "seasoning",
+    "cookingMethod": "raw",
+    "description": "Acidic liquid - balances flavors and tenderizes proteins"
+  },
+  {
+    "name": "Sugar",
+    "quantity": 1,
+    "unit": "tablespoon (12g)",
+    "caloriesPerUnit": 48,
+    "pricePerUnit": 0.08,
+    "category": "seasoning",
+    "cookingMethod": "raw",
+    "description": "Sweet crystalline carbohydrate - sweetens and balances flavors"
+  },
+  {
+    "name": "Garlic Powder",
+    "quantity": 1,
+    "unit": "tablespoon (9g)",
+    "caloriesPerUnit": 28,
+    "pricePerUnit": 0.35,
+    "category": "seasoning",
+    "cookingMethod": "raw",
+    "description": "Dried ground garlic - convenient alternative to fresh with longer shelf life"
+  },
+  {
+    "name": "Paprika",
+    "quantity": 1,
+    "unit": "tablespoon (7g)",
+    "caloriesPerUnit": 19,
+    "pricePerUnit": 0.40,
+    "category": "seasoning",
+    "cookingMethod": "raw",
+    "description": "Ground red pepper spice - adds color and mild sweet pepper flavor"
+  },
+  {
+    "name": "Chili Powder",
+    "quantity": 1,
+    "unit": "tablespoon (8g)",
+    "caloriesPerUnit": 24,
+    "pricePerUnit": 0.45,
+    "category": "seasoning",
+    "cookingMethod": "raw",
+    "description": "Blend of ground chilies and spices - adds heat and depth to dishes"
+  },
+  {
+    "name": "Oregano",
+    "quantity": 1,
+    "unit": "tablespoon (2g)",
+    "caloriesPerUnit": 5,
+    "pricePerUnit": 0.50,
+    "category": "seasoning",
+    "cookingMethod": "raw",
+    "description": "Mediterranean herb - aromatic and slightly bitter flavor profile"
+  }
+]

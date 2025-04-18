@@ -1,0 +1,132 @@
+[
+  {
+    "name": "Chicken Breast",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 165,
+    "pricePerUnit": 4.29,
+    "category": "meat",
+    "cookingMethod": "raw",
+    "description": "Boneless, skinless chicken breast - lean protein source"
+  },
+  {
+    "name": "Ground Beef (80/20)",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 254,
+    "pricePerUnit": 6.49,
+    "category": "meat",
+    "cookingMethod": "raw",
+    "description": "80% lean, 20% fat ground beef - versatile for burgers, meatballs, etc."
+  },
+  {
+    "name": "Beef Sirloin Steak",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 211,
+    "pricePerUnit": 9.99,
+    "category": "meat",
+    "cookingMethod": "raw",
+    "description": "Top sirloin beef cut - leaner than ribeye with good flavor"
+  },
+  {
+    "name": "Pork Chop",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 231,
+    "pricePerUnit": 5.29,
+    "category": "meat",
+    "cookingMethod": "raw",
+    "description": "Center cut, bone-in pork chop - moderate fat content"
+  },
+  {
+    "name": "Bacon",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 541,
+    "pricePerUnit": 7.99,
+    "category": "meat",
+    "cookingMethod": "raw",
+    "description": "Sliced pork belly cured with salt and spices - high fat content"
+  },
+  {
+    "name": "Ground Turkey",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 170,
+    "pricePerUnit": 5.19,
+    "category": "meat",
+    "cookingMethod": "raw",
+    "description": "Lean ground turkey - lower fat alternative to ground beef"
+  },
+  {
+    "name": "Lamb Chop",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 294,
+    "pricePerUnit": 12.99,
+    "category": "meat",
+    "cookingMethod": "raw",
+    "description": "Bone-in lamb rib or loin chop - distinctive flavor"
+  },
+  {
+    "name": "Beef Ribeye Steak",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 291,
+    "pricePerUnit": 14.99,
+    "category": "meat",
+    "cookingMethod": "raw",
+    "description": "Marbled ribeye cut - rich flavor due to high fat content"
+  },
+  {
+    "name": "Pork Tenderloin",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 143,
+    "pricePerUnit": 6.79,
+    "category": "meat",
+    "cookingMethod": "raw",
+    "description": "Lean, tender cut from the loin of the pig - low fat content"
+  },
+  {
+    "name": "Beef Brisket",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 248,
+    "pricePerUnit": 8.49,
+    "category": "meat",
+    "cookingMethod": "raw",
+    "description": "Tough cut that becomes tender with slow cooking - moderate fat content"
+  },
+  {
+    "name": "Atlantic Salmon",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 208,
+    "pricePerUnit": 11.99,
+    "category": "meat",
+    "cookingMethod": "raw",
+    "description": "Farm-raised Atlantic salmon fillet - high in omega-3 fatty acids"
+  },
+  {
+    "name": "Tuna Steak",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 144,
+    "pricePerUnit": 15.49,
+    "category": "meat",
+    "cookingMethod": "raw",
+    "description": "Fresh yellowfin tuna steak - lean protein source with firm texture"
+  },
+  {
+    "name": "Cod Fillet",
+    "quantity": 1,
+    "unit": "100g",
+    "caloriesPerUnit": 82,
+    "pricePerUnit": 9.99,
+    "category": "meat",
+    "cookingMethod": "raw",
+    "description": "Wild-caught North Atlantic cod - mild flavor, flaky white flesh"
+  }
+]
