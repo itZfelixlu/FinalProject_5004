@@ -6,12 +6,14 @@ import java.util.List;
  * Tracks total calories based on included ingredients and their cooking methods.
  */
 public class Recipe {
-  private String name;
-  private int calories;
-  private String flavor;
-  private String cuisine;
-  private int prepTime; // in minutes
-  private List<Ingredient> ingredients;
+  private final String name;
+  private final String flavor;
+  private final String cuisine;
+  private final int prepTime; // in minutes
+  private final List<Ingredient> ingredients;
+  private final int calories;
+  private final NutritionCalculator nutritionCalculator;
+  private NutritionInfo nutritionInfo;
 
   /**
    * Creates a new recipe with the specified attributes.
@@ -41,22 +43,24 @@ public class Recipe {
     this.flavor = flavor.trim();
     this.cuisine = cuisine.trim();
     this.prepTime = prepTime;
-    this.ingredients = new ArrayList<>();
-    this.calories = 0; // Will be calculated based on ingredients
+    this.ingredients = new ArrayList<>(ingredients); // Create defensive copy
+    this.nutritionCalculator = new NutritionCalculator();
+
+    // Calculate calories from ingredients
+    int totalCalories = 0;
+    for (Ingredient ingredient : ingredients) {
+      totalCalories += ingredient.getTotalCalories();
+    }
+    this.calories = totalCalories;
+
+    // Calculate initial nutrition
+    calculateNutrition();
   }
 
-  /**
-   * Adds an ingredient to the recipe and updates total calories.
-   *
-   * @param ingredient Ingredient to add
-   * @throws IllegalArgumentException If ingredient is null
-   */
-  public void addIngredient(Ingredient ingredient) {
-    if (ingredient == null) {
-      throw new IllegalArgumentException("Ingredient cannot be null");
+  private void calculateNutrition() {
+    if (nutritionCalculator != null) {
+      this.nutritionInfo = nutritionCalculator.calculateNutritionForRecipe(this);
     }
-    ingredients.add(ingredient);
-    calories += ingredient.getTotalCalories();
   }
 
   /**
@@ -110,7 +114,19 @@ public class Recipe {
    * @return List of ingredients
    */
   public List<Ingredient> getIngredients() {
-    return new ArrayList<>(ingredients);
+    return new ArrayList<>(ingredients); // Return defensive copy
+  }
+
+  /**
+   * Gets the nutrition information for the recipe.
+   *
+   * @return Nutrition information
+   */
+  public NutritionInfo getNutritionInfo() {
+    if (nutritionInfo == null) {
+      calculateNutrition();
+    }
+    return nutritionInfo;
   }
 
   /**
