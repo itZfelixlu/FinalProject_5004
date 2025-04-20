@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.Map;
 
 public class RecipeNutritionGUI {
   // Main summary panel (shown in RecipeGUI)
@@ -21,10 +22,21 @@ public class RecipeNutritionGUI {
   private double targetCarbs = 300.0;
 
   private Recipe currentRecipe;  // Add this field to track current recipe
+  private Map<String, Object> userData;
+  private NutritionCalculator nutritionCalculator;
 
-  public RecipeNutritionGUI() {
+  public RecipeNutritionGUI(Map<String, Object> userData) {
+    this.userData = userData;
+    this.nutritionCalculator = new NutritionCalculator();
     createSummaryPanel();
     createDetailWindow();
+
+    // Set target calories based on user's TDEE if available
+    if (userData != null && userData.containsKey("tdee")) {
+      double tdee = (double) userData.get("tdee");
+      targetCalories = tdee;
+      updateTargetLabels();
+    }
   }
 
   private void createSummaryPanel() {
@@ -119,49 +131,66 @@ public class RecipeNutritionGUI {
     }
   }
 
+  private void updateTargetLabels() {
+    if (userData != null) {
+      // Set protein target (1.6-2.2g per kg of body weight)
+      double weight = (double) userData.get("weight");
+      targetProtein = weight * 1.8; // Using middle of the range
+
+      // Set fat target (20-35% of total calories)
+      targetFat = (targetCalories * 0.3) / 9; // 30% of calories, divided by 9 calories per gram
+
+      // Set carbs target (remaining calories)
+      double proteinCalories = targetProtein * 4;
+      double fatCalories = targetFat * 9;
+      double carbCalories = targetCalories - proteinCalories - fatCalories;
+      targetCarbs = carbCalories / 4; // 4 calories per gram
+
+      // Update the display if a recipe is currently shown
+      if (currentRecipe != null) {
+        updateNutritionDisplay(currentRecipe);
+      }
+    }
+  }
+
   public JPanel getSummaryPanel() {
     return summaryPanel;
   }
 
   public void updateNutritionDisplay(Recipe recipe) {
-    this.currentRecipe = recipe;  // Store the current recipe
-    if (recipe != null) {
-      NutritionInfo nutrition = recipe.getNutritionInfo();
-
-      // Update progress bars in summary panel
-      updateProgressBar(calorieProgress, nutrition.getCalories(), targetCalories);
-      updateProgressBar(proteinProgress, nutrition.getProtein(), targetProtein);
-      updateProgressBar(fatProgress, nutrition.getFat(), targetFat);
-      updateProgressBar(carbProgress, nutrition.getCarbohydrates(), targetCarbs);
-
-      // Update detailed window
-      StringBuilder details = new StringBuilder();
-      details.append(String.format("Nutrition Information for %s:\n\n", recipe.getName()));
-      details.append(String.format("Calories: %.1f / %.1f kcal\n", nutrition.getCalories(), targetCalories));
-      details.append(String.format("Protein: %.1f / %.1f g\n", nutrition.getProtein(), targetProtein));
-      details.append(String.format("Fat: %.1f / %.1f g\n", nutrition.getFat(), targetFat));
-      details.append(String.format("Carbohydrates: %.1f / %.1f g\n", nutrition.getCarbohydrates(), targetCarbs));
-      details.append(String.format("Fiber: %.1f g\n", nutrition.getFiber()));
-      details.append(String.format("Sugar: %.1f g\n", nutrition.getSugar()));
-      details.append(String.format("Sodium: %.1f mg\n", nutrition.getSodium()));
-
-      nutritionDetails.setText(details.toString());
+    if (recipe == null || recipe.getNutritionInfo() == null) {
+      System.out.println("Warning: Null recipe or nutrition info in updateNutritionDisplay");
+      return;
     }
+
+    NutritionInfo nutrition = recipe.getNutritionInfo();
+    
+    // Update progress bars with proper integer values
+    updateProgressBar(calorieProgress, (int)nutrition.getCalories(), 2000);
+    updateProgressBar(proteinProgress, (int)nutrition.getProtein(), 100);
+    updateProgressBar(fatProgress, (int)nutrition.getFat(), 100);
+    updateProgressBar(carbProgress, (int)nutrition.getCarbohydrates(), 300);
+
+    // Update labels with proper formatting
+    StringBuilder details = new StringBuilder();
+    details.append(String.format("Nutrition Information for %s:\n\n", recipe.getName()));
+    details.append(String.format("Calories: %d / %.1f kcal\n", (int)nutrition.getCalories(), targetCalories));
+    details.append(String.format("Protein: %d / %.1f g\n", (int)nutrition.getProtein(), targetProtein));
+    details.append(String.format("Fat: %d / %.1f g\n", (int)nutrition.getFat(), targetFat));
+    details.append(String.format("Carbohydrates: %d / %.1f g\n", (int)nutrition.getCarbohydrates(), targetCarbs));
+    details.append(String.format("Fiber: %d g\n", (int)nutrition.getFiber()));
+    details.append(String.format("Sugar: %.1f g\n", nutrition.getSugar()));
+    details.append(String.format("Sodium: %.1f mg\n", nutrition.getSodium()));
+
+    nutritionDetails.setText(details.toString());
   }
 
-  private void updateProgressBar(JProgressBar bar, double current, double target) {
-    int percentage = (int) ((current / target) * 100);
-    bar.setValue(Math.min(percentage, 100));
-    bar.setString(String.format("%.1f / %.1f (%.0f%%)", current, target, Math.min(percentage, 100)));
-
-    // Color coding
-    if (percentage > 100) {
-      bar.setForeground(Color.RED);
-    } else if (percentage > 80) {
-      bar.setForeground(Color.ORANGE);
-    } else {
-      bar.setForeground(Color.GREEN);
-    }
+  private void updateProgressBar(JProgressBar bar, int value, int max) {
+    if (bar == null) return;
+    
+    bar.setMaximum(max);
+    bar.setValue(value);
+    bar.setString(String.format("%d%%", (int)((value * 100.0) / max)));
   }
 
   public void positionDetailWindow(JFrame mainWindow) {
@@ -175,4 +204,4 @@ public class RecipeNutritionGUI {
   public void showDetailWindow() {
     detailWindow.setVisible(true);
   }
-} 
+}

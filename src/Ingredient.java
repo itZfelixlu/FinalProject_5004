@@ -19,15 +19,22 @@ public class Ingredient extends AbstractIngredient {
 
     // Path to JSON files
     private static final String JSON_BASE_PATH = "src/ingredientsSource/";
+    private static final String ALTERNATE_JSON_BASE_PATH = "FinalProject_5004/src/ingredientsSource/";
 
     static {
         // Initialize calorie modifiers and ingredients
         try {
-            // Load calorie modifiers from JSON
-            calorieModifiers = JSONParser.readCalorieModifiers(JSON_BASE_PATH + "CalorieModifier.json");
-            
-            // Load ingredients from JSON files
-            loadIngredientsFromJSON();
+            // Try loading from primary path first
+            try {
+                System.out.println("Trying primary path for CalorieModifier.json: " + JSON_BASE_PATH);
+                calorieModifiers = JSONParser.readCalorieModifiers(JSON_BASE_PATH + "CalorieModifier.json");
+                loadIngredientsFromJSON(JSON_BASE_PATH);
+            } catch (IOException e) {
+                // If primary path fails, try alternate path
+                System.out.println("Primary path failed, trying alternate path: " + ALTERNATE_JSON_BASE_PATH);
+                calorieModifiers = JSONParser.readCalorieModifiers(ALTERNATE_JSON_BASE_PATH + "CalorieModifier.json");
+                loadIngredientsFromJSON(ALTERNATE_JSON_BASE_PATH);
+            }
         } catch (IOException e) {
             System.err.println("Error loading data from JSON files: " + e.getMessage());
             
@@ -197,7 +204,7 @@ public class Ingredient extends AbstractIngredient {
      * 
      * @throws IOException If errors occur reading JSON files
      */
-    private static void loadIngredientsFromJSON() throws IOException {
+    private static void loadIngredientsFromJSON(String basePath) throws IOException {
         // Initialize lists
         meatIngredients = new ArrayList<>();
         vegetableIngredients = new ArrayList<>();
@@ -207,33 +214,38 @@ public class Ingredient extends AbstractIngredient {
         
         // Load ingredients from JSON files
         try {
-            meatIngredients = JSONParser.readIngredientsFromFile(JSON_BASE_PATH + "meat.json");
+            meatIngredients = JSONParser.readIngredientsFromFile(basePath + "meat.json");
         } catch (IOException e) {
             System.err.println("Error loading meat ingredients: " + e.getMessage());
+            throw e;
         }
         
         try {
-            vegetableIngredients = JSONParser.readIngredientsFromFile(JSON_BASE_PATH + "vegetable.json");
+            vegetableIngredients = JSONParser.readIngredientsFromFile(basePath + "vegetable.json");
         } catch (IOException e) {
             System.err.println("Error loading vegetable ingredients: " + e.getMessage());
+            throw e;
         }
         
         try {
-            fruitIngredients = JSONParser.readIngredientsFromFile(JSON_BASE_PATH + "fruit.json");
+            fruitIngredients = JSONParser.readIngredientsFromFile(basePath + "fruit.json");
         } catch (IOException e) {
             System.err.println("Error loading fruit ingredients: " + e.getMessage());
+            throw e;
         }
         
         try {
-            dairyIngredients = JSONParser.readIngredientsFromFile(JSON_BASE_PATH + "dairy.json");
+            dairyIngredients = JSONParser.readIngredientsFromFile(basePath + "dairy.json");
         } catch (IOException e) {
             System.err.println("Error loading dairy ingredients: " + e.getMessage());
+            throw e;
         }
         
         try {
-            seasoningIngredients = JSONParser.readIngredientsFromFile(JSON_BASE_PATH + "seasoning.json");
+            seasoningIngredients = JSONParser.readIngredientsFromFile(basePath + "seasoning.json");
         } catch (IOException e) {
             System.err.println("Error loading seasoning ingredients: " + e.getMessage());
+            throw e;
         }
     }
 

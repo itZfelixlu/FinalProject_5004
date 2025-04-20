@@ -8,7 +8,7 @@
     "ingredients": [
       {
         "name": "Ground Beef (80/20)",
-        "quantity": 500,
+        "quantity": 150,
         "unit": "g",
         "caloriesPerUnit": 254,
         "pricePerUnit": 6.49,
@@ -17,7 +17,7 @@
       },
       {
         "name": "Tomato",
-        "quantity": 400,
+        "quantity": 150,
         "unit": "g",
         "caloriesPerUnit": 18,
         "pricePerUnit": 3.49,
@@ -26,7 +26,7 @@
       },
       {
         "name": "Olive Oil",
-        "quantity": 30,
+        "quantity": 15,
         "unit": "ml",
         "caloriesPerUnit": 119,
         "pricePerUnit": 0.45,
@@ -44,7 +44,7 @@
     "ingredients": [
       {
         "name": "Chicken Breast",
-        "quantity": 300,
+        "quantity": 120,
         "unit": "g",
         "caloriesPerUnit": 165,
         "pricePerUnit": 4.29,
@@ -53,7 +53,7 @@
       },
       {
         "name": "Broccoli",
-        "quantity": 200,
+        "quantity": 100,
         "unit": "g",
         "caloriesPerUnit": 34,
         "pricePerUnit": 2.49,
@@ -62,7 +62,7 @@
       },
       {
         "name": "Soy Sauce",
-        "quantity": 30,
+        "quantity": 15,
         "unit": "ml",
         "caloriesPerUnit": 9,
         "pricePerUnit": 0.20,
@@ -80,7 +80,7 @@
     "ingredients": [
       {
         "name": "Cucumber",
-        "quantity": 1,
+        "quantity": 0.5,
         "unit": "piece",
         "caloriesPerUnit": 15,
         "pricePerUnit": 2.29,
@@ -89,7 +89,7 @@
       },
       {
         "name": "Tomato",
-        "quantity": 2,
+        "quantity": 1,
         "unit": "piece",
         "caloriesPerUnit": 18,
         "pricePerUnit": 3.49,
@@ -98,7 +98,7 @@
       },
       {
         "name": "Cheddar Cheese",
-        "quantity": 100,
+        "quantity": 30,
         "unit": "g",
         "caloriesPerUnit": 402,
         "pricePerUnit": 8.99,
@@ -116,7 +116,7 @@
     "ingredients": [
       {
         "name": "Ground Beef (80/20)",
-        "quantity": 400,
+        "quantity": 120,
         "unit": "g",
         "caloriesPerUnit": 254,
         "pricePerUnit": 6.49,
@@ -125,7 +125,7 @@
       },
       {
         "name": "Bell Pepper",
-        "quantity": 2,
+        "quantity": 1,
         "unit": "piece",
         "caloriesPerUnit": 31,
         "pricePerUnit": 3.99,
@@ -134,7 +134,7 @@
       },
       {
         "name": "Chili Powder",
-        "quantity": 2,
+        "quantity": 1,
         "unit": "tablespoon",
         "caloriesPerUnit": 24,
         "pricePerUnit": 0.45,
@@ -152,7 +152,7 @@
     "ingredients": [
       {
         "name": "Banana",
-        "quantity": 2,
+        "quantity": 1,
         "unit": "medium",
         "caloriesPerUnit": 105,
         "pricePerUnit": 0.69,
@@ -161,7 +161,7 @@
       },
       {
         "name": "Strawberries",
-        "quantity": 1,
+        "quantity": 0.5,
         "unit": "cup",
         "caloriesPerUnit": 49,
         "pricePerUnit": 3.99,
@@ -170,7 +170,7 @@
       },
       {
         "name": "Greek Yogurt",
-        "quantity": 200,
+        "quantity": 50,
         "unit": "g",
         "caloriesPerUnit": 59,
         "pricePerUnit": 1.59,
@@ -188,7 +188,7 @@
     "ingredients": [
       {
         "name": "potato",
-        "quantity": 300,
+        "quantity": 100,
         "unit": "g",
         "caloriesPerUnit": 77,
         "pricePerUnit": 1.29,
@@ -197,7 +197,7 @@
       },
       {
         "name": "carrot",
-        "quantity": 200,
+        "quantity": 100,
         "unit": "g",
         "caloriesPerUnit": 41,
         "pricePerUnit": 0.99,
@@ -206,7 +206,7 @@
       },
       {
         "name": "curry powder",
-        "quantity": 20,
+        "quantity": 10,
         "unit": "g",
         "caloriesPerUnit": 20,
         "pricePerUnit": 2.99,
@@ -224,7 +224,7 @@
     "ingredients": [
       {
         "name": "Atlantic Salmon",
-        "quantity": 200,
+        "quantity": 120,
         "unit": "g",
         "caloriesPerUnit": 208,
         "pricePerUnit": 11.99,
@@ -233,7 +233,7 @@
       },
       {
         "name": "Lemon",
-        "quantity": 1,
+        "quantity": 0.5,
         "unit": "piece",
         "caloriesPerUnit": 17,
         "pricePerUnit": 0.69,
@@ -242,7 +242,7 @@
       },
       {
         "name": "Olive Oil",
-        "quantity": 15,
+        "quantity": 10,
         "unit": "ml",
         "caloriesPerUnit": 119,
         "pricePerUnit": 0.45,

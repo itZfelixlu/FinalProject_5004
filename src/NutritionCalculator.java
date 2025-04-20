@@ -1,32 +1,67 @@
 import java.util.Map;
 import java.util.HashMap;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.io.File;
 
 public class NutritionCalculator {
   private Map<String, Map<String, NutritionInfo>> nutritionData;
+  private Map<String, Double> cookingModifiers;
 
   public NutritionCalculator() {
     this.nutritionData = new HashMap<>();
+    this.cookingModifiers = new HashMap<>();
     loadNutritionData();
   }
 
   private void loadNutritionData() {
     try {
-      nutritionData = JSONParser.readMicroNutritionData("src/ingredientsSource/micro_nutrition.json");
+      // Get the current directory
+      File currentDir = new File(".");
+      String currentPath = currentDir.getAbsolutePath();
+      System.out.println("Starting directory: " + currentPath);
+      
+      // Try both possible paths due to nested folder structure
+      String[] possiblePaths = {
+          currentPath + File.separator + "src" + File.separator + "ingredientsSource" + File.separator + "micro_nutrition.json",
+          currentPath + File.separator + "FinalProject_5004" + File.separator + "src" + File.separator + "ingredientsSource" + File.separator + "micro_nutrition.json"
+      };
+      
+      boolean fileFound = false;
+      for (String path : possiblePaths) {
+          File nutritionFile = new File(path);
+          System.out.println("Trying path: " + nutritionFile.getAbsolutePath());
+          
+          if (nutritionFile.exists()) {
+              System.out.println("Found nutrition data at: " + nutritionFile.getAbsolutePath());
+              nutritionData = JSONParser.readMicroNutritionData(nutritionFile.getAbsolutePath());
+              fileFound = true;
+              break;
+          }
+      }
+      
+      if (!fileFound) {
+          throw new IOException("Could not find micro_nutrition.json in any of the expected locations");
+      }
+
     } catch (IOException e) {
       System.err.println("Error loading nutrition data: " + e.getMessage());
+      System.err.println("Current directory: " + new File(".").getAbsolutePath());
+      // Initialize with empty data instead of throwing an exception
+      nutritionData = new HashMap<>();
     }
   }
 
   public NutritionInfo calculateNutritionForIngredient(String category, String ingredient, double quantity) {
     Map<String, NutritionInfo> categoryMap = nutritionData.get(category);
     if (categoryMap == null) {
-      return new NutritionInfo(0, 0, 0, 0, 0, 0, 0);
+      return new NutritionInfo(0, 0, 0, 0, 0, 0);
     }
 
     NutritionInfo baseNutrition = categoryMap.get(ingredient);
     if (baseNutrition == null) {
-      return new NutritionInfo(0, 0, 0, 0, 0, 0, 0);
+      return new NutritionInfo(0, 0, 0, 0, 0, 0);
     }
 
     // Adjust nutrition values based on quantity
@@ -34,22 +69,140 @@ public class NutritionCalculator {
   }
 
   public NutritionInfo calculateNutritionForRecipe(Recipe recipe) {
-    NutritionInfo totalNutrition = new NutritionInfo(0, 0, 0, 0, 0, 0, 0);
+    if (recipe == null) {
+      System.out.println("Warning: Null recipe provided to calculateNutritionForRecipe");
+      return new NutritionInfo(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    }
+
+    double totalProtein = 0;
+    double totalCarbs = 0;
+    double totalFat = 0;
+    double totalFiber = 0;
+    double totalSugar = 0;
+    double totalSodium = 0;
 
     for (Ingredient ingredient : recipe.getIngredients()) {
-      NutritionInfo ingredientNutrition = calculateNutritionForIngredient(
-          ingredient.getCategory(),
-          ingredient.getName(),
-          ingredient.getQuantity()
-      );
-      totalNutrition = totalNutrition.add(ingredientNutrition);
+      if (ingredient == null) {
+        System.out.println("Warning: Null ingredient found in recipe");
+        continue;
+      }
+
+      // Get the base nutrition values for this ingredient
+      Map<String, Double> nutritionValues = getNutritionValues(ingredient.getName());
+      if (nutritionValues == null) {
+        System.out.println("Warning: No nutrition values found for ingredient: " + ingredient.getName());
+        continue;
+      }
+
+      // Calculate nutrition based on quantity and unit
+      double quantity = ingredient.getQuantity();
+      String unit = ingredient.getUnit().toLowerCase();
+      
+      // Convert quantity to grams if needed
+      double quantityInGrams = quantity;
+      if (unit.equals("ml")) {
+        // For liquids, assume density of 1g/ml
+        quantityInGrams = quantity;
+      } else if (unit.equals("tablespoon")) {
+        quantityInGrams = quantity * 15; // 1 tbsp = 15g
+      } else if (unit.equals("teaspoon")) {
+        quantityInGrams = quantity * 5; // 1 tsp = 5g
+      } else if (unit.equals("cup")) {
+        quantityInGrams = quantity * 240; // 1 cup = 240g
+      } else if (unit.equals("piece") || unit.equals("medium")) {
+        // For pieces, use the quantity as is since nutrition data is per piece
+        quantityInGrams = quantity;
+      }
+
+      // Calculate nutrition per 100g
+      double protein = (nutritionValues.getOrDefault("protein", 0.0) * quantityInGrams) / 100.0;
+      double carbs = (nutritionValues.getOrDefault("carbohydrates", 0.0) * quantityInGrams) / 100.0;
+      double fat = (nutritionValues.getOrDefault("fat", 0.0) * quantityInGrams) / 100.0;
+      double fiber = (nutritionValues.getOrDefault("fiber", 0.0) * quantityInGrams) / 100.0;
+      double sugar = (nutritionValues.getOrDefault("sugar", 0.0) * quantityInGrams) / 100.0;
+      double sodium = (nutritionValues.getOrDefault("sodium", 0.0) * quantityInGrams) / 100.0;
+
+      // Apply cooking method modifier
+      double modifier = getCookingMethodModifier(ingredient.getCookingMethod());
+      protein *= modifier;
+      carbs *= modifier;
+      fat *= modifier;
+      fiber *= modifier;
+      sugar *= modifier;
+      sodium *= modifier;
+
+      totalProtein += protein;
+      totalCarbs += carbs;
+      totalFat += fat;
+      totalFiber += fiber;
+      totalSugar += sugar;
+      totalSodium += sodium;
+
+      System.out.println(String.format("Ingredient: %s, Quantity: %.2f %s (%.2f g), Protein: %.2f, Carbs: %.2f, Fat: %.2f, Modifier: %.2f",
+        ingredient.getName(), quantity, unit, quantityInGrams, protein, carbs, fat, modifier));
     }
+
+    // Create NutritionInfo with the total values
+    NutritionInfo totalNutrition = new NutritionInfo(totalProtein, totalFat, totalCarbs, totalFiber, totalSugar, totalSodium);
+    
+    System.out.println(String.format("Total nutrition for recipe %s: Calories=%.2f, Protein=%.2f, Carbs=%.2f, Fat=%.2f, Fiber=%.2f",
+      recipe.getName(), totalNutrition.getCalories(), totalProtein, totalCarbs, totalFat, totalFiber));
 
     return totalNutrition;
   }
 
+  private Map<String, Double> getNutritionValues(String ingredientName) {
+    if (ingredientName == null || ingredientName.trim().isEmpty()) {
+      return null;
+    }
+
+    String normalizedName = ingredientName.toLowerCase().trim();
+    
+    // First try to find the ingredient in each category
+    for (Map.Entry<String, Map<String, NutritionInfo>> categoryEntry : nutritionData.entrySet()) {
+      String category = categoryEntry.getKey();
+      Map<String, NutritionInfo> categoryMap = categoryEntry.getValue();
+      
+      // Check if this category contains the ingredient
+      for (Map.Entry<String, NutritionInfo> ingredientEntry : categoryMap.entrySet()) {
+        String ingredientKey = ingredientEntry.getKey().toLowerCase();
+        if (ingredientKey.contains(normalizedName) || normalizedName.contains(ingredientKey)) {
+          NutritionInfo nutritionInfo = ingredientEntry.getValue();
+          System.out.println(String.format("Found nutrition data for %s in category %s", ingredientName, category));
+          
+          // Convert NutritionInfo to Map<String, Double>
+          Map<String, Double> values = new HashMap<>();
+          values.put("protein", nutritionInfo.getProtein());
+          values.put("carbohydrates", nutritionInfo.getCarbohydrates());
+          values.put("fat", nutritionInfo.getFat());
+          values.put("fiber", nutritionInfo.getFiber());
+          values.put("sugar", nutritionInfo.getSugar());
+          values.put("sodium", nutritionInfo.getSodium());
+
+          System.out.println(String.format("Nutrition values for %s: Protein=%.2f, Carbs=%.2f, Fat=%.2f, Calories=%.2f",
+              ingredientName, nutritionInfo.getProtein(), nutritionInfo.getCarbohydrates(), 
+              nutritionInfo.getFat(), nutritionInfo.getCalories()));
+
+          return values;
+        }
+      }
+    }
+    
+    System.out.println(String.format("No nutrition data found for ingredient: %s", ingredientName));
+    return null;
+  }
+
+  private double getCookingMethodModifier(String cookingMethod) {
+    if (cookingMethod == null || cookingMethod.trim().isEmpty()) {
+      return 1.0;
+    }
+
+    String normalizedMethod = cookingMethod.toLowerCase().trim();
+    return cookingModifiers.getOrDefault(normalizedMethod, 1.0);
+  }
+
   public NutritionInfo calculateNutritionForMeal(Map<String, Recipe> meals) {
-    NutritionInfo totalNutrition = new NutritionInfo(0, 0, 0, 0, 0, 0, 0);
+    NutritionInfo totalNutrition = new NutritionInfo(0, 0, 0, 0, 0, 0);
 
     for (Recipe recipe : meals.values()) {
       totalNutrition = totalNutrition.add(calculateNutritionForRecipe(recipe));

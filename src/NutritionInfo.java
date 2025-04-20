@@ -1,22 +1,22 @@
-
 public class NutritionInfo {
-  private double protein;
-  private double fat;
-  private double carbohydrates;
-  private double fiber;
-  private double sugar;
-  private double sodium;
-  private double calories;
+  private final double protein;
+  private final double fat;
+  private final double carbohydrates;
+  private final double fiber;
+  private final double sugar;
+  private final double sodium;
+  private final double calories;
 
   public NutritionInfo(double protein, double fat, double carbohydrates,
-      double fiber, double sugar, double sodium, double calories) {
+      double fiber, double sugar, double sodium) {
     this.protein = protein;
     this.fat = fat;
     this.carbohydrates = carbohydrates;
     this.fiber = fiber;
     this.sugar = sugar;
     this.sodium = sodium;
-    this.calories = calories;
+    // Calculate calories from macronutrients
+    this.calories = (protein * 4) + (carbohydrates * 4) + (fat * 9);
   }
 
   // Add two NutritionInfo objects together
@@ -27,8 +27,7 @@ public class NutritionInfo {
         this.carbohydrates + other.carbohydrates,
         this.fiber + other.fiber,
         this.sugar + other.sugar,
-        this.sodium + other.sodium,
-        this.calories + other.calories
+        this.sodium + other.sodium
     );
   }
 
@@ -40,8 +39,7 @@ public class NutritionInfo {
         this.carbohydrates * factor,
         this.fiber * factor,
         this.sugar * factor,
-        this.sodium * factor,
-        this.calories * factor
+        this.sodium * factor
     );
   }
 
@@ -53,4 +51,10 @@ public class NutritionInfo {
   public double getSugar() { return sugar; }
   public double getSodium() { return sodium; }
   public double getCalories() { return calories; }
+
+  @Override
+  public String toString() {
+    return String.format("NutritionInfo[calories=%.1f, protein=%.1f, carbs=%.1f, fat=%.1f, fiber=%.1f, sugar=%.1f, sodium=%.1f]",
+        calories, protein, carbohydrates, fat, fiber, sugar, sodium);
+  }
 }

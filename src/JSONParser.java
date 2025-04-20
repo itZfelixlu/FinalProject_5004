@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.io.File;
 
 /**
  * A simple JSON parser for reading ingredient and calorie modifier data.
@@ -176,14 +177,25 @@ public class JSONParser {
      * @throws IOException If file read fails
      */
     private static String readFile(String filePath) throws IOException {
+        File file = new File(filePath);
+        if (!file.exists()) {
+            throw new IOException("File not found: " + filePath);
+        }
+
         StringBuilder content = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 content.append(line).append("\n");
             }
         }
-        return content.toString();
+
+        String result = content.toString();
+        if (result.isEmpty()) {
+            throw new IOException("File is empty: " + filePath);
+        }
+
+        return result;
     }
 
     /**
@@ -307,54 +319,63 @@ public class JSONParser {
      */
     private static Map<String, String> parseJSONObject(String json) {
         Map<String, String> properties = new HashMap<>();
+        if (!json.trim().startsWith("{") || !json.trim().endsWith("}")) {
+            return properties;
+        }
 
-        if (json.trim().startsWith("{") && json.trim().endsWith("}")) {
-            json = json.trim().substring(1, json.trim().length() - 1);
+        json = json.trim().substring(1, json.trim().length() - 1);
+        StringBuilder key = new StringBuilder();
+        StringBuilder value = new StringBuilder();
+        boolean inKey = true;
+        boolean inQuotes = false;
+        int nestedDepth = 0;
 
-            int i = 0;
-            while (i < json.length()) {
-                // Find start of key
-                while (i < json.length() && (Character.isWhitespace(json.charAt(i)) || json.charAt(i) == ',')) {
-                    i++;
+        for (int i = 0; i < json.length(); i++) {
+            char c = json.charAt(i);
+
+            if (c == '"' && (i == 0 || json.charAt(i - 1) != '\\')) {
+                inQuotes = !inQuotes;
+                if (!inKey) {
+                    value.append(c);
                 }
-
-                if (i >= json.length()) break;
-
-                // Parse key
-                if (json.charAt(i) == '"') {
-                    i++; // Skip opening quote
-                    int keyStart = i;
-                    while (i < json.length() && json.charAt(i) != '"') i++;
-                    String key = json.substring(keyStart, i);
-                    i++; // Skip closing quote
-
-                    // Find colon
-                    while (i < json.length() && json.charAt(i) != ':') i++;
-                    i++; // Skip colon
-
-                    // Skip whitespace
-                    while (i < json.length() && Character.isWhitespace(json.charAt(i))) i++;
-
-                    // Parse value
-                    if (i < json.length()) {
-                        if (json.charAt(i) == '"') {
-                            // String value
-                            i++; // Skip opening quote
-                            int valueStart = i;
-                            while (i < json.length() && (json.charAt(i) != '"' || json.charAt(i - 1) == '\\')) i++;
-                            String value = json.substring(valueStart, i);
-                            i++; // Skip closing quote
-                            properties.put(key, value);
-                        } else {
-                            // Number, boolean, or null value
-                            int valueStart = i;
-                            while (i < json.length() && json.charAt(i) != ',' && json.charAt(i) != '}') i++;
-                            String value = json.substring(valueStart, i).trim();
-                            properties.put(key, value);
-                        }
+            } else if (c == ':' && !inQuotes && nestedDepth == 0) {
+                inKey = false;
+            } else if ((c == ',' && !inQuotes && nestedDepth == 0) || i == json.length() - 1) {
+                if (i == json.length() - 1 && c != ',') {
+                    if (!inKey) {
+                        value.append(c);
+                    } else {
+                        key.append(c);
                     }
+                }
+                
+                String keyStr = key.toString().trim();
+                String valueStr = value.toString().trim();
+                
+                if (keyStr.startsWith("\"") && keyStr.endsWith("\"")) {
+                    keyStr = keyStr.substring(1, keyStr.length() - 1);
+                }
+                
+                properties.put(keyStr, valueStr);
+                
+                key = new StringBuilder();
+                value = new StringBuilder();
+                inKey = true;
+            } else if (c == '{' || c == '[') {
+                nestedDepth++;
+                if (!inKey) {
+                    value.append(c);
+                }
+            } else if (c == '}' || c == ']') {
+                nestedDepth--;
+                if (!inKey) {
+                    value.append(c);
+                }
+            } else {
+                if (inKey) {
+                    key.append(c);
                 } else {
-                    i++; // Skip non-key character
+                    value.append(c);
                 }
             }
         }
@@ -372,6 +393,10 @@ public class JSONParser {
     public static Map<String, Map<String, NutritionInfo>> readMicroNutritionData(String filePath) throws IOException {
         Map<String, Map<String, NutritionInfo>> result = new HashMap<>();
         String json = readFile(filePath);
+        
+        if (json == null || json.trim().isEmpty()) {
+            throw new IOException("Empty or null JSON content from file: " + filePath);
+        }
 
         // Parse JSON object
         if (json.trim().startsWith("{") && json.trim().endsWith("}")) {
@@ -380,38 +405,191 @@ public class JSONParser {
             // Split into categories
             Map<String, String> categories = splitJSONSections(json);
 
-            for (Map.Entry<String, String> categoryEntry : categories.entrySet()) {
-                String category = categoryEntry.getKey();
-                String categoryJson = categoryEntry.getValue();
+            for (Map.Entry<String, String> entry : categories.entrySet()) {
+                String category = entry.getKey();
+                String categoryJson = entry.getValue();
 
-                Map<String, String> ingredients = splitJSONSections(categoryJson);
-                Map<String, NutritionInfo> categoryMap = new HashMap<>();
-
-                for (Map.Entry<String, String> ingredientEntry : ingredients.entrySet()) {
-                    String ingredient = ingredientEntry.getKey();
-                    String ingredientJson = ingredientEntry.getValue();
-
-                    Map<String, String> nutritionValues = parseJSONObject(ingredientJson);
-                    try {
-                        NutritionInfo nutritionInfo = new NutritionInfo(
-                            Double.parseDouble(nutritionValues.get("protein")),
-                            Double.parseDouble(nutritionValues.get("fat")),
-                            Double.parseDouble(nutritionValues.get("carbohydrates")),
-                            Double.parseDouble(nutritionValues.get("fiber")),
-                            Double.parseDouble(nutritionValues.get("sugar")),
-                            Double.parseDouble(nutritionValues.get("sodium")),
-                            Double.parseDouble(nutritionValues.get("calories"))
-                        );
-                        categoryMap.put(ingredient, nutritionInfo);
-                    } catch (NumberFormatException e) {
-                        System.err.println("Invalid number format in nutrition data for " + ingredient);
-                    }
+                if (category == null || categoryJson == null) {
+                    System.err.println("Skipping null category or data in nutrition file");
+                    continue;
                 }
 
-                result.put(category, categoryMap);
+                try {
+                    Map<String, String> ingredients = parseJSONObject(categoryJson);
+                    Map<String, NutritionInfo> categoryMap = new HashMap<>();
+
+                    for (Map.Entry<String, String> ingredientEntry : ingredients.entrySet()) {
+                        String ingredient = ingredientEntry.getKey();
+                        String nutritionJson = ingredientEntry.getValue();
+
+                        if (ingredient == null || nutritionJson == null) {
+                            System.err.println("Skipping null ingredient or nutrition data");
+                            continue;
+                        }
+
+                        try {
+                            Map<String, String> nutritionValues = parseJSONObject(nutritionJson);
+                            NutritionInfo info = createNutritionInfoFromValues(nutritionValues);
+                            if (info != null) {
+                                categoryMap.put(ingredient, info);
+                            }
+                        } catch (Exception e) {
+                            System.err.println("Error parsing nutrition data for ingredient " + ingredient + ": " + e.getMessage());
+                        }
+                    }
+
+                    result.put(category, categoryMap);
+                } catch (Exception e) {
+                    System.err.println("Error parsing category " + category + ": " + e.getMessage());
+                }
             }
         }
 
         return result;
+    }
+
+    private static NutritionInfo createNutritionInfoFromValues(Map<String, String> values) {
+        try {
+            double protein = parseDoubleValue(values.get("protein"));
+            double fat = parseDoubleValue(values.get("fat"));
+            double carbohydrates = parseDoubleValue(values.get("carbohydrates"));
+            double fiber = parseDoubleValue(values.get("fiber"));
+            double sugar = parseDoubleValue(values.get("sugar"));
+            double sodium = parseDoubleValue(values.get("sodium"));
+
+            return new NutritionInfo(protein, fat, carbohydrates, fiber, sugar, sodium);
+        } catch (Exception e) {
+            System.err.println("Error creating NutritionInfo: " + e.getMessage());
+            return new NutritionInfo(0, 0, 0, 0, 0, 0);
+        }
+    }
+
+    private static double parseDoubleValue(Object value) {
+        if (value == null) return 0.0;
+        try {
+            if (value instanceof Number) {
+                return ((Number) value).doubleValue();
+            }
+            return Double.parseDouble(value.toString());
+        } catch (Exception e) {
+            System.err.println("Error parsing double value: " + value);
+            return 0.0;
+        }
+    }
+
+    /**
+     * Reads recipes from a JSON file.
+     *
+     * @param filePath Path to the JSON file
+     * @return List of Recipe objects
+     * @throws IOException If file read fails
+     */
+    public static List<Recipe> readRecipesFromFile(String filePath) throws IOException {
+        List<Recipe> recipes = new ArrayList<>();
+        String json = readFile(filePath);
+
+        // Parse JSON array
+        if (json.trim().startsWith("[") && json.trim().endsWith("]")) {
+            json = json.trim().substring(1, json.trim().length() - 1);
+
+            // Split array into individual objects
+            List<String> objects = splitJSONObjects(json);
+
+            for (String obj : objects) {
+                Map<String, String> properties = parseJSONObject(obj);
+                try {
+                    Recipe recipe = createRecipeFromProperties(properties);
+                    if (recipe != null) {
+                        recipes.add(recipe);
+                    }
+                } catch (Exception e) {
+                    System.err.println("Error parsing recipe: " + e.getMessage());
+                }
+            }
+        }
+
+        return recipes;
+    }
+
+    /**
+     * Creates a Recipe object from property map.
+     *
+     * @param properties Map of recipe properties
+     * @return Recipe object or null if invalid
+     */
+    private static Recipe createRecipeFromProperties(Map<String, String> properties) {
+        String name = properties.get("name");
+        String flavor = properties.get("flavor");
+        String flavorTagsStr = properties.get("flavorTags");
+        String cuisine = properties.get("cuisine");
+        String prepTimeStr = properties.get("prepTime");
+        String ingredientsStr = properties.get("ingredients");
+
+        if (name == null || flavor == null || cuisine == null ||
+            prepTimeStr == null || ingredientsStr == null || flavorTagsStr == null) {
+            return null;
+        }
+
+        try {
+            int prepTime = Integer.parseInt(prepTimeStr);
+            List<Ingredient> ingredients = parseIngredients(ingredientsStr);
+            List<String> flavorTags = parseFlavorTags(flavorTagsStr);
+
+            return new Recipe(
+                name,
+                flavor,
+                flavorTags,
+                cuisine,
+                prepTime,
+                ingredients
+            );
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid number format in recipe properties");
+        }
+    }
+
+    /**
+     * Parses ingredients from a JSON string.
+     *
+     * @param ingredientsStr JSON string of ingredients
+     * @return List of Ingredient objects
+     */
+    private static List<Ingredient> parseIngredients(String ingredientsStr) {
+        List<Ingredient> ingredients = new ArrayList<>();
+        if (ingredientsStr.trim().startsWith("[") && ingredientsStr.trim().endsWith("]")) {
+            ingredientsStr = ingredientsStr.trim().substring(1, ingredientsStr.trim().length() - 1);
+            List<String> ingredientObjects = splitJSONObjects(ingredientsStr);
+
+            for (String ingredientObj : ingredientObjects) {
+                Map<String, String> properties = parseJSONObject(ingredientObj);
+                Ingredient ingredient = createIngredientFromProperties(properties);
+                if (ingredient != null) {
+                    ingredients.add(ingredient);
+                }
+            }
+        }
+        return ingredients;
+    }
+
+    /**
+     * Parses flavor tags from a JSON string.
+     *
+     * @param flavorTagsStr JSON string of flavor tags
+     * @return List of flavor tags
+     */
+    private static List<String> parseFlavorTags(String flavorTagsStr) {
+        List<String> flavorTags = new ArrayList<>();
+        if (flavorTagsStr.trim().startsWith("[") && flavorTagsStr.trim().endsWith("]")) {
+            flavorTagsStr = flavorTagsStr.trim().substring(1, flavorTagsStr.trim().length() - 1);
+            String[] tags = flavorTagsStr.split(",");
+            for (String tag : tags) {
+                tag = tag.trim();
+                if (tag.startsWith("\"") && tag.endsWith("\"")) {
+                    tag = tag.substring(1, tag.length() - 1);
+                }
+                flavorTags.add(tag);
+            }
+        }
+        return flavorTags;
     }
 }

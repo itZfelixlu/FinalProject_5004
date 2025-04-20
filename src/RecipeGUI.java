@@ -1,187 +1,495 @@
 import javax.swing.*;
+import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class RecipeGUI extends JFrame {
-  private List<Recipe> recipes;
-  private DefaultListModel<String> recipeListModel;
-  private JList<String> recipeList;
-  private JTextArea recipeDetails;
-  private JTextField searchField;
-  private JComboBox<String> cuisineFilter;
-  private JComboBox<String> calorieFilter;
-  private JComboBox<String> prepTimeFilter;
-  private JTextField searchBar;
-  private JComboBox<String> cuisineCombo;
-  private JComboBox<String> prepTimeCombo;
-  private JTextField calorieGoalField;
-  private JPanel recipePanel;
-  private RecipeNutritionGUI nutritionGUI;
-  private List<Recipe> allRecipes;
+    private List<Recipe> recipes;
+    private List<Recipe> allRecipes;
+    private Map<String, Object> userData;
+    private JPanel recipeCardsPanel;
+    private JPanel recipeDetailsPanel;
+    private Recipe selectedRecipe;
+    private JTextField searchField;
+    private JComboBox<String> cuisineFilter;
+    private JComboBox<String> calorieFilter;
+    private JComboBox<String> prepTimeFilter;
+    private RecipeNutritionGUI nutritionGUI;
 
-  public RecipeGUI(List<Recipe> recipes) {
-    this.allRecipes = recipes;
-    this.recipes = new ArrayList<>(recipes);  // Create a copy for filtering
-    recipeListModel = new DefaultListModel<>();
+    public RecipeGUI(List<Recipe> recipes, Map<String, Object> userData) {
+        this.userData = userData;
+        this.allRecipes = new ArrayList<>(recipes); // Create defensive copy
+        this.recipes = new ArrayList<>(recipes);
 
-    setTitle("Recipe Manager");
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setSize(800, 600);
-    setLayout(new BorderLayout());
+        setTitle("Shopping APP");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setMinimumSize(new Dimension(800, 600)); // Set minimum window size
+        setLayout(new BorderLayout(10, 10));
 
-    // Initialize nutrition GUI
-    nutritionGUI = new RecipeNutritionGUI();
-    nutritionGUI.positionDetailWindow(this);
+        // Initialize nutrition GUI
+        nutritionGUI = new RecipeNutritionGUI(userData);
+        nutritionGUI.positionDetailWindow(this);
 
-    // Add nutrition summary panel to the top right
-    JPanel topRightPanel = new JPanel(new BorderLayout());
-    topRightPanel.add(nutritionGUI.getSummaryPanel(), BorderLayout.NORTH);
-    add(topRightPanel, BorderLayout.EAST);
+        // Create main panels
+        JPanel leftPanel = createLeftPanel();
+        JPanel rightPanel = createRightPanel();
 
-    // Create components
-    JPanel leftPanel = new JPanel(new BorderLayout());
-    JPanel rightPanel = new JPanel(new BorderLayout());
+        // Add panels to frame with resizable split
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
+        splitPane.setDividerLocation(0.5); // Start with equal sizes
+        splitPane.setResizeWeight(0.5); // Both sides resize equally
+        add(splitPane, BorderLayout.CENTER);
 
-    // Search panel
-    JPanel searchPanel = new JPanel(new BorderLayout());
-    searchField = new JTextField();
-    searchField.setToolTipText("Search by flavor or description (e.g., 'heavy', 'sour', 'spicy')");
-    JButton searchButton = new JButton("Search");
-    searchButton.addActionListener(e -> filterRecipes());
-    searchPanel.add(searchField, BorderLayout.CENTER);
-    searchPanel.add(searchButton, BorderLayout.EAST);
-
-    // Filter panel
-    JPanel filterPanel = new JPanel(new GridLayout(3, 2));
-
-    // Cuisine filter
-    filterPanel.add(new JLabel("Cuisine:"));
-    String[] cuisines = {"All", "italian", "chinese", "greek", "mexican", "american", "indian", "japanese", "korean", "french", "vietnamese", "middle eastern"};
-    cuisineFilter = new JComboBox<>(cuisines);
-    cuisineFilter.addActionListener(e -> filterRecipes());
-    filterPanel.add(cuisineFilter);
-
-    // Calorie filter
-    filterPanel.add(new JLabel("Calories:"));
-    String[] calorieRanges = {"All", "0-300", "301-600", "601-900", "901+"};
-    calorieFilter = new JComboBox<>(calorieRanges);
-    calorieFilter.addActionListener(e -> filterRecipes());
-    filterPanel.add(calorieFilter);
-
-    // Prep time filter
-    filterPanel.add(new JLabel("Prep Time:"));
-    String[] prepTimeRanges = {"All", "0-15 min", "16-30 min", "31-45 min", "46+ min"};
-    prepTimeFilter = new JComboBox<>(prepTimeRanges);
-    prepTimeFilter.addActionListener(e -> filterRecipes());
-    filterPanel.add(prepTimeFilter);
-
-    // Recipe list
-    recipeList = new JList<>(recipeListModel);
-    recipeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    recipeList.addListSelectionListener(e -> {
-      if (!e.getValueIsAdjusting()) {
-        displayRecipeDetails();
-      }
-    });
-    JScrollPane listScrollPane = new JScrollPane(recipeList);
-
-    // Recipe details
-    recipeDetails = new JTextArea();
-    recipeDetails.setEditable(false);
-    JScrollPane detailsScrollPane = new JScrollPane(recipeDetails);
-
-    // Add components to panels
-    leftPanel.add(searchPanel, BorderLayout.NORTH);
-    leftPanel.add(filterPanel, BorderLayout.CENTER);
-    leftPanel.add(listScrollPane, BorderLayout.SOUTH);
-
-    rightPanel.add(new JLabel("Recipe Details"), BorderLayout.NORTH);
-    rightPanel.add(detailsScrollPane, BorderLayout.CENTER);
-
-    // Add panels to frame
-    add(leftPanel, BorderLayout.WEST);
-    add(rightPanel, BorderLayout.CENTER);
-
-    // Set sizes
-    leftPanel.setPreferredSize(new Dimension(300, 600));
-
-    // Initial population of recipe list
-    populateRecipeList();
-  }
-
-  private void filterRecipes() {
-    String searchText = searchField.getText().toLowerCase();
-    String selectedCuisine = (String) cuisineFilter.getSelectedItem();
-    String selectedCalorieRange = (String) calorieFilter.getSelectedItem();
-    String selectedPrepTimeRange = (String) prepTimeFilter.getSelectedItem();
-
-    recipeListModel.clear();
-
-    for (Recipe recipe : recipes) {
-      boolean matchesSearch = searchText.isEmpty() ||
-          recipe.getName().toLowerCase().contains(searchText) ||
-          recipe.getFlavor().toLowerCase().contains(searchText);
-
-      boolean matchesCuisine = selectedCuisine.equals("All") ||
-          recipe.getCuisine().equalsIgnoreCase(selectedCuisine);
-
-      boolean matchesCalories = selectedCalorieRange.equals("All") ||
-          matchesCalorieRange(recipe.getCalories(), selectedCalorieRange);
-
-      boolean matchesPrepTime = selectedPrepTimeRange.equals("All") ||
-          matchesPrepTimeRange(recipe.getPrepTime(), selectedPrepTimeRange);
-
-      if (matchesSearch && matchesCuisine && matchesCalories && matchesPrepTime) {
-        recipeListModel.addElement(recipe.getName());
-      }
+        // Initial population of recipes
+        filterAndDisplayRecipes();
+        
+        // Center the window
+        setLocationRelativeTo(null);
     }
-  }
 
-  private boolean matchesCalorieRange(int calories, String range) {
-    switch (range) {
-      case "0-300": return calories <= 300;
-      case "301-600": return calories > 300 && calories <= 600;
-      case "601-900": return calories > 600 && calories <= 900;
-      case "901+": return calories > 900;
-      default: return true;
+    private JPanel createLeftPanel() {
+        JPanel panel = new JPanel(new BorderLayout(10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Create top panel for search and filters
+        JPanel topPanel = new JPanel(new BorderLayout(5, 10));
+        
+        // Search panel
+        JPanel searchPanel = createSearchPanel();
+        topPanel.add(searchPanel, BorderLayout.NORTH);
+        
+        // Filters panel
+        JPanel filtersPanel = createFiltersPanel();
+        topPanel.add(filtersPanel, BorderLayout.CENTER);
+
+        panel.add(topPanel, BorderLayout.NORTH);
+
+        // Create a container panel for the recipe cards with a custom layout
+        JPanel cardsContainer = new JPanel(new BorderLayout());
+        cardsContainer.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+        // Recipe cards panel with WrapLayout
+        recipeCardsPanel = new JPanel() {
+            @Override
+            public Dimension getPreferredSize() {
+                // Calculate the width based on the viewport width
+                int containerWidth = getParent() != null ? getParent().getWidth() : 800;
+                int cardWidth = 250; // Width of each card
+                int hgap = 15; // Horizontal gap between cards
+                
+                // Calculate number of cards that can fit in a row
+                int cardsPerRow = Math.max(1, (containerWidth - 40) / (cardWidth + hgap));
+                
+                // Calculate total rows needed
+                int componentCount = getComponentCount();
+                int rows = (int) Math.ceil((double) componentCount / cardsPerRow);
+                
+                // Calculate total height
+                int cardHeight = 150; // Height of each card
+                int vgap = 15; // Vertical gap between cards
+                int totalHeight = rows * (cardHeight + vgap) + vgap;
+                
+                return new Dimension(containerWidth - 40, totalHeight);
+            }
+
+            @Override
+            public void doLayout() {
+                synchronized (getTreeLock()) {
+                    int containerWidth = getWidth();
+                    int cardWidth = 250; // Width of each card
+                    int cardHeight = 150; // Height of each card
+                    int hgap = 15; // Horizontal gap
+                    int vgap = 15; // Vertical gap
+                    
+                    // Calculate number of cards that can fit in a row
+                    int cardsPerRow = Math.max(1, (containerWidth - hgap) / (cardWidth + hgap));
+                    
+                    // Position each component
+                    int x = hgap;
+                    int y = vgap;
+                    int componentCount = getComponentCount();
+                    
+                    for (int i = 0; i < componentCount; i++) {
+                        Component c = getComponent(i);
+                        if (c.isVisible()) {
+                            c.setBounds(x, y, cardWidth, cardHeight);
+                            
+                            x += cardWidth + hgap;
+                            if ((i + 1) % cardsPerRow == 0) {
+                                x = hgap;
+                                y += cardHeight + vgap;
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        recipeCardsPanel.setBackground(Color.WHITE);
+        recipeCardsPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+        // Wrap the cards panel in a scroll pane
+        JScrollPane scrollPane = new JScrollPane(recipeCardsPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setBorder(null);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+
+        // Add a component listener to handle resize events
+        scrollPane.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                recipeCardsPanel.revalidate();
+                recipeCardsPanel.repaint();
+            }
+        });
+
+        cardsContainer.add(scrollPane, BorderLayout.CENTER);
+        panel.add(cardsContainer, BorderLayout.CENTER);
+
+        return panel;
     }
-  }
 
-  private boolean matchesPrepTimeRange(int prepTime, String range) {
-    switch (range) {
-      case "0-15 min": return prepTime <= 15;
-      case "16-30 min": return prepTime > 15 && prepTime <= 30;
-      case "31-45 min": return prepTime > 30 && prepTime <= 45;
-      case "46+ min": return prepTime > 45;
-      default: return true;
+    private JPanel createSearchPanel() {
+        JPanel panel = new JPanel(new BorderLayout(5, 5));
+        searchField = new JTextField(20);
+        searchField.addActionListener(e -> performSearch());
+        panel.add(searchField, BorderLayout.CENTER);
+        return panel;
     }
-  }
 
-  private void displayRecipeDetails() {
-    int selectedIndex = recipeList.getSelectedIndex();
-    if (selectedIndex != -1) {
-      Recipe recipe = recipes.get(selectedIndex);
-      recipeDetails.setText(recipe.getDetailedInfo());
-      nutritionGUI.updateNutritionDisplay(recipe);
+    private JPanel createFiltersPanel() {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
+        
+        // Cuisine filter
+        JPanel cuisinePanel = new JPanel(new BorderLayout(5, 5));
+        cuisinePanel.add(new JLabel("Cuisines"), BorderLayout.WEST);
+        String[] cuisines = {
+            "All", 
+            "American",
+            "Chinese", 
+            "French", 
+            "Greek",
+            "Indian",
+            "Italian",
+            "Japanese",
+            "Korean",
+            "Mexican",
+            "Middle Eastern",
+            "Thai",
+            "Vietnamese"
+        };
+        cuisineFilter = new JComboBox<>(cuisines);
+        cuisinePanel.add(cuisineFilter, BorderLayout.CENTER);
+        panel.add(cuisinePanel);
+
+        // Calories filter
+        JPanel caloriesPanel = new JPanel(new BorderLayout(5, 5));
+        caloriesPanel.add(new JLabel("Calories"), BorderLayout.WEST);
+        String[] calories = {"All", "0-300", "301-600", "601-900", "901+"};
+        calorieFilter = new JComboBox<>(calories);
+        caloriesPanel.add(calorieFilter, BorderLayout.CENTER);
+        panel.add(caloriesPanel);
+
+        // Prep time filter
+        JPanel prepTimePanel = new JPanel(new BorderLayout(5, 5));
+        prepTimePanel.add(new JLabel("Prep time"), BorderLayout.WEST);
+        String[] prepTimes = {"All", "0-15 min", "16-30 min", "31-45 min", "46+ min"};
+        prepTimeFilter = new JComboBox<>(prepTimes);
+        prepTimePanel.add(prepTimeFilter, BorderLayout.CENTER);
+        panel.add(prepTimePanel);
+
+        // Go button
+        JButton goButton = new JButton("Go");
+        goButton.addActionListener(e -> performSearch());
+        panel.add(goButton);
+
+        return panel;
     }
-  }
 
-  private void populateRecipeList() {
-    for (Recipe recipe : recipes) {
-      recipeListModel.addElement(recipe.getName());
+    private void performSearch() {
+        filterAndDisplayRecipes();
     }
-  }
 
-  public static void main(String[] args) {
-    // Example usage
-    List<Recipe> recipes = new ArrayList<>();
-    // Add sample recipes here
+    private void filterAndDisplayRecipes() {
+        String searchText = searchField.getText().toLowerCase();
+        String selectedCuisine = (String) cuisineFilter.getSelectedItem();
+        String selectedCalorieRange = (String) calorieFilter.getSelectedItem();
+        String selectedPrepTimeRange = (String) prepTimeFilter.getSelectedItem();
 
-    SwingUtilities.invokeLater(() -> {
-      RecipeGUI mainGUI = new RecipeGUI(recipes);
-      mainGUI.setVisible(true);
-    });
-  }
+        List<Recipe> filteredRecipes = new ArrayList<>();
+        
+        for (Recipe recipe : allRecipes) {
+            if (matchesFilters(recipe, searchText, selectedCuisine, 
+                             selectedCalorieRange, selectedPrepTimeRange)) {
+                filteredRecipes.add(recipe);
+            }
+        }
+
+        displayRecipeCards(filteredRecipes);
+    }
+
+    private boolean matchesFilters(Recipe recipe, String searchText, 
+                                 String cuisine, String calorieRange, String prepTimeRange) {
+        if (recipe == null) {
+            return false;
+        }
+
+        // Search text matching
+        boolean matchesSearch = searchText.isEmpty();
+        if (!matchesSearch) {
+            String searchLower = searchText.toLowerCase();
+            matchesSearch = recipe.getName().toLowerCase().contains(searchLower) ||
+                          recipe.getFlavor().toLowerCase().contains(searchLower) ||
+                          recipe.getCuisine().toLowerCase().contains(searchLower) ||
+                          recipe.getFlavorTags().stream()
+                              .anyMatch(tag -> tag.toLowerCase().contains(searchLower));
+        }
+
+        // Cuisine matching - more lenient comparison
+        boolean matchesCuisine = true;
+        if (!"All".equalsIgnoreCase(cuisine)) {
+            String recipeCuisine = recipe.getCuisine().toLowerCase().trim();
+            String selectedCuisine = cuisine.toLowerCase().trim();
+            matchesCuisine = recipeCuisine.contains(selectedCuisine) || selectedCuisine.contains(recipeCuisine);
+        }
+
+        // Calorie range matching
+        boolean matchesCalories = matchesCalorieRange(recipe.getCalories(), calorieRange);
+
+        // Prep time matching
+        boolean matchesPrepTime = matchesPrepTimeRange(recipe.getPrepTime(), prepTimeRange);
+
+        return matchesSearch && matchesCuisine && matchesCalories && matchesPrepTime;
+    }
+
+    private boolean matchesCalorieRange(int calories, String range) {
+        if ("All".equals(range)) return true;
+        
+        try {
+            switch (range) {
+                case "0-300":
+                    return calories >= 0 && calories <= 300;
+                case "301-600":
+                    return calories >= 301 && calories <= 600;
+                case "601-900":
+                    return calories >= 601 && calories <= 900;
+                case "901+":
+                    return calories >= 901;
+                default:
+                    return true;
+            }
+        } catch (Exception e) {
+            return true;
+        }
+    }
+
+    private boolean matchesPrepTimeRange(int prepTime, String range) {
+        if ("All".equals(range)) return true;
+        
+        try {
+            switch (range) {
+                case "0-15 min":
+                    return prepTime >= 0 && prepTime <= 15;
+                case "16-30 min":
+                    return prepTime >= 16 && prepTime <= 30;
+                case "31-45 min":
+                    return prepTime >= 31 && prepTime <= 45;
+                case "46+ min":
+                    return prepTime >= 46;
+                default:
+                    return true;
+            }
+        } catch (Exception e) {
+            return true;
+        }
+    }
+
+    private void displayRecipeCards(List<Recipe> recipes) {
+        recipeCardsPanel.removeAll();
+        
+        if (recipes.isEmpty()) {
+            // Create a panel to center the "no results" message
+            JPanel centerPanel = new JPanel(new GridBagLayout());
+            JLabel noResultsLabel = new JLabel("No matching recipes found", SwingConstants.CENTER);
+            noResultsLabel.setFont(new Font("Arial", Font.BOLD, 14));
+            centerPanel.add(noResultsLabel);
+            recipeCardsPanel.add(centerPanel);
+        } else {
+            for (Recipe recipe : recipes) {
+                JPanel card = createRecipeCard(recipe);
+                recipeCardsPanel.add(card);
+            }
+        }
+
+        recipeCardsPanel.revalidate();
+        recipeCardsPanel.repaint();
+    }
+
+    private JPanel createRecipeCard(Recipe recipe) {
+        // Create a fixed-size card
+        JPanel card = new JPanel(new BorderLayout(5, 5));
+        card.setPreferredSize(new Dimension(250, 150));
+        card.setMinimumSize(new Dimension(250, 150));
+        card.setMaximumSize(new Dimension(250, 150));
+        card.setBackground(Color.WHITE);
+        card.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(Color.GRAY),
+            BorderFactory.createEmptyBorder(10, 10, 10, 10)
+        ));
+
+        // Recipe name
+        JLabel nameLabel = new JLabel(recipe.getName(), SwingConstants.CENTER);
+        nameLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        card.add(nameLabel, BorderLayout.NORTH);
+
+        // Basic info panel
+        JPanel infoPanel = new JPanel(new GridLayout(3, 1, 2, 2));
+        infoPanel.setBackground(Color.WHITE);
+        infoPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        infoPanel.add(new JLabel("Cuisine: " + recipe.getCuisine()));
+        infoPanel.add(new JLabel("Calories: " + recipe.getCalories()));
+        infoPanel.add(new JLabel("Prep Time: " + recipe.getPrepTime() + " min"));
+        card.add(infoPanel, BorderLayout.CENTER);
+
+        // Make the entire card clickable
+        card.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                selectedRecipe = recipe;
+                displayRecipeDetails(recipe);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                card.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(Color.BLUE, 2),
+                    BorderFactory.createEmptyBorder(9, 9, 9, 9)
+                ));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                card.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(Color.GRAY),
+                    BorderFactory.createEmptyBorder(10, 10, 10, 10)
+                ));
+            }
+        });
+
+        return card;
+    }
+
+    private void displayRecipeDetails(Recipe recipe) {
+        recipeDetailsPanel.removeAll();
+        recipeDetailsPanel.setLayout(new BorderLayout(10, 10));
+
+        // Recipe title
+        JLabel titleLabel = new JLabel(recipe.getName());
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        recipeDetailsPanel.add(titleLabel, BorderLayout.NORTH);
+
+        // Main content panel
+        JPanel contentPanel = new JPanel(new GridLayout(3, 1, 10, 10));
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Ingredients section
+        JPanel ingredientsPanel = new JPanel(new BorderLayout());
+        JLabel ingredientsLabel = new JLabel("Ingredients:");
+        ingredientsLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        ingredientsPanel.add(ingredientsLabel, BorderLayout.NORTH);
+        
+        JTextArea ingredientsArea = new JTextArea(recipe.getIngredientsText());
+        ingredientsArea.setEditable(false);
+        ingredientsArea.setLineWrap(true);
+        ingredientsArea.setWrapStyleWord(true);
+        ingredientsPanel.add(new JScrollPane(ingredientsArea), BorderLayout.CENTER);
+        contentPanel.add(ingredientsPanel);
+
+        // Nutrition section
+        JPanel nutritionPanel = new JPanel(new BorderLayout());
+        JLabel nutritionLabel = new JLabel("Nutrition Information:");
+        nutritionLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        nutritionPanel.add(nutritionLabel, BorderLayout.NORTH);
+        
+        JTextArea nutritionArea = new JTextArea(recipe.getNutritionText());
+        nutritionArea.setEditable(false);
+        nutritionArea.setLineWrap(true);
+        nutritionArea.setWrapStyleWord(true);
+        nutritionPanel.add(new JScrollPane(nutritionArea), BorderLayout.CENTER);
+        contentPanel.add(nutritionPanel);
+
+        // Preparation section
+        JPanel prepPanel = new JPanel(new BorderLayout());
+        JLabel prepLabel = new JLabel("Preparation Steps:");
+        prepLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        prepPanel.add(prepLabel, BorderLayout.NORTH);
+        
+        JTextArea prepArea = new JTextArea(recipe.getPrepText());
+        prepArea.setEditable(false);
+        prepArea.setLineWrap(true);
+        prepArea.setWrapStyleWord(true);
+        prepPanel.add(new JScrollPane(prepArea), BorderLayout.CENTER);
+        contentPanel.add(prepPanel);
+
+        recipeDetailsPanel.add(contentPanel, BorderLayout.CENTER);
+
+        // Add to shopping list button
+        JButton addButton = new JButton("Add to Shopping List");
+        addButton.addActionListener(e -> addRecipeToShoppingList(recipe));
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.add(addButton);
+        recipeDetailsPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        // Update nutrition display
+        if (nutritionGUI != null) {
+            nutritionGUI.updateNutritionDisplay(recipe);
+        }
+
+        recipeDetailsPanel.revalidate();
+        recipeDetailsPanel.repaint();
+    }
+
+    private void addRecipeToShoppingList(Recipe recipe) {
+        // TODO: Implement shopping list functionality
+        JOptionPane.showMessageDialog(this,
+            "Recipe added to shopping list: " + recipe.getName(),
+            "Added to Shopping List",
+            JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private JPanel createRightPanel() {
+        JPanel panel = new JPanel(new BorderLayout(10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        recipeDetailsPanel = new JPanel(new BorderLayout(10, 10));
+        recipeDetailsPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+        // Add button
+        JButton addButton = new JButton("Add");
+        addButton.addActionListener(e -> {
+            if (selectedRecipe != null) {
+                addRecipeToShoppingList(selectedRecipe);
+            }
+        });
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.add(addButton);
+
+        panel.add(buttonPanel, BorderLayout.NORTH);
+        panel.add(recipeDetailsPanel, BorderLayout.CENTER);
+
+        return panel;
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            List<Recipe> recipes = new ArrayList<>();
+            // Add sample recipes here
+            RecipeGUI gui = new RecipeGUI(recipes, null);
+            gui.setVisible(true);
+        });
+    }
 } 
