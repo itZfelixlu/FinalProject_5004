@@ -19,6 +19,7 @@ public class Ingredient extends AbstractIngredient {
     private static List<Ingredient> dairyIngredients;
     private static List<Ingredient> seasoningIngredients;
     private String description;
+    private final double price; // Price per unit
 
     // Path to JSON files
     private static final String JSON_BASE_PATH = "src/ingredientsSource/";
@@ -57,12 +58,14 @@ public class Ingredient extends AbstractIngredient {
      * @param pricePerUnit Price per unit
      * @param category Food category
      * @param description Brief description of the ingredient
+     * @param price Price per unit
      */
     public Ingredient(String name, double quantity, String unit,
                      int caloriesPerUnit, double pricePerUnit,
-                     String category, String description) {
+                     String category, String description, double price) {
         super(name, quantity, unit, caloriesPerUnit, pricePerUnit, category);
         this.description = description;
+        this.price = price;
     }
 
     /**
@@ -76,12 +79,14 @@ public class Ingredient extends AbstractIngredient {
      * @param category Food category
      * @param cookingMethod Method of preparation
      * @param description Brief description of the ingredient
+     * @param price Price per unit
      */
     public Ingredient(String name, double quantity, String unit,
                      int caloriesPerUnit, double pricePerUnit,
-                     String category, String cookingMethod, String description) {
+                     String category, String cookingMethod, String description, double price) {
         super(name, quantity, unit, caloriesPerUnit, pricePerUnit, category, cookingMethod);
         this.description = description;
+        this.price = price;
     }
 
     /**
@@ -300,19 +305,19 @@ public class Ingredient extends AbstractIngredient {
         
         // Add a few basic ingredients to each category
         meatIngredients.add(new Ingredient("Chicken Breast", 1, "100g", 165, 4.29, "meat", 
-                "Boneless, skinless chicken breast - lean protein source"));
+                "Boneless, skinless chicken breast - lean protein source", 4.29));
         
         vegetableIngredients.add(new Ingredient("Broccoli", 1, "100g", 34, 1.99, "vegetable", 
-                "Fresh broccoli florets - high in fiber and vitamin C"));
+                "Fresh broccoli florets - high in fiber and vitamin C", 1.99));
         
         fruitIngredients.add(new Ingredient("Apple", 1, "100g", 52, 0.99, "fruit", 
-                "Fresh apple - good source of fiber and vitamin C"));
+                "Fresh apple - good source of fiber and vitamin C", 0.99));
         
         dairyIngredients.add(new Ingredient("Cheddar Cheese", 1, "100g", 402, 5.49, "dairy", 
-                "Aged cheddar cheese - rich in calcium and protein"));
+                "Aged cheddar cheese - rich in calcium and protein", 5.49));
         
         seasoningIngredients.add(new Ingredient("Salt", 1, "tsp", 0, 0.05, "seasoning", 
-                "Table salt - basic flavor enhancer"));
+                "Table salt - basic flavor enhancer", 0.05));
     }
     
     /**
@@ -412,7 +417,8 @@ public class Ingredient extends AbstractIngredient {
             original.getPricePerUnit(),
             original.getCategory(),
             original.getCookingMethod(),
-            original.getDescription()
+            original.getDescription(),
+            original.getPricePerUnit()
         );
     }
     

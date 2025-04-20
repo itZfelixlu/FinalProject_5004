@@ -138,13 +138,49 @@ public abstract class AbstractIngredient implements IIngredient {
   }
 
   /**
-   * Calculates the total price based on quantity.
+   * Extracts the base unit from a compound unit string.
+   * For example: "tablespoon (15g)" -> "tablespoon"
+   */
+  protected String getBaseUnit() {
+    String unitLower = unit.toLowerCase();
+    int parenIndex = unitLower.indexOf('(');
+    return parenIndex > 0 ? unitLower.substring(0, parenIndex).trim() : unitLower;
+  }
+
+  /**
+   * Gets the standard quantity multiplier for the current unit.
+   * This converts various units to their standard form for calculations.
+   */
+  protected double getUnitMultiplier() {
+    String baseUnit = getBaseUnit();
+    switch (baseUnit) {
+      case "tablespoon":
+        return 15.0; // 1 tablespoon = 15g
+      case "teaspoon":
+        return 5.0;  // 1 teaspoon = 5g
+      case "cup":
+        return 240.0; // 1 cup = 240g
+      case "ml":
+        return 1.0;  // Assume 1ml = 1g for liquids
+      default:
+        return 1.0;  // For units already in standard form (g, piece, etc.)
+    }
+  }
+
+  /**
+   * Calculates the total price based on quantity and unit conversion.
+   * Prices in JSON are per 100g, so we need to divide by 100 to get price per gram.
    *
    * @return Total price
    */
   @Override
   public double getTotalPrice() {
-    return pricePerUnit * quantity;
+    if (unit.toLowerCase().contains("piece") || unit.toLowerCase().contains("egg")) {
+      // For items priced per piece, don't apply the 100g conversion
+      return pricePerUnit * quantity;
+    }
+    // For weight-based items, convert price from per 100g to per gram
+    return (pricePerUnit / 100.0) * quantity * getUnitMultiplier();
   }
 
   /**

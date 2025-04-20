@@ -164,9 +164,9 @@ public class JSONParser {
             double price = Double.parseDouble(priceStr);
 
             if (cookingMethod != null) {
-                return new Ingredient(name, quantity, unit, calories, price, category, cookingMethod, description);
+                return new Ingredient(name, quantity, unit, calories, price, category, cookingMethod, description, price);
             } else {
-                return new Ingredient(name, quantity, unit, calories, price, category, description);
+                return new Ingredient(name, quantity, unit, calories, price, category, description, price);
             }
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Invalid number format in ingredient properties");

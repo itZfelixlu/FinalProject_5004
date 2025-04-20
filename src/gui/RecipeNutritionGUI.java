@@ -162,6 +162,24 @@ public class RecipeNutritionGUI {
     recipeScrollPane.setPreferredSize(new Dimension(progressBarWidth, 150));
     recipeListPanel.add(recipeScrollPane, BorderLayout.CENTER);
     
+    // Add checkout button below recipe list
+    JButton checkoutButton = new JButton("Proceed to Checkout");
+    checkoutButton.setFont(new Font("Arial", Font.BOLD, 14));
+    checkoutButton.addActionListener(e -> {
+        if (addedRecipes.isEmpty()) {
+            JOptionPane.showMessageDialog(detailWindow,
+                "Please add some recipes before proceeding to checkout.",
+                "No Recipes Added",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        CheckoutGUI checkoutGUI = new CheckoutGUI(new ArrayList<>(addedRecipes));
+        checkoutGUI.setVisible(true);
+    });
+    JPanel checkoutPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    checkoutPanel.add(checkoutButton);
+    recipeListPanel.add(checkoutPanel, BorderLayout.SOUTH);
+    
     topPanel.add(recipeListPanel, BorderLayout.CENTER);
     mainPanel.add(topPanel, BorderLayout.NORTH);
 
