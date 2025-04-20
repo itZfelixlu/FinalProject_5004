@@ -6,6 +6,12 @@ import java.util.HashMap;
 import java.io.IOException;
 import java.io.File;
 
+import model.Recipe;
+import model.NutritionCalculator;
+import model.JSONParser;
+import gui.UserInfoGUI;
+import gui.RecipeGUI;
+
 public class Main {
   private static List<Recipe> recipes;
   private static UserInfoGUI userInfoGUI;

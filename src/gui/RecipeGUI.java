@@ -1,3 +1,5 @@
+package gui;
+
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
@@ -5,10 +7,21 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import model.Recipe;
+import model.NutritionInfo;
+import filters.IRecipeFilter;
+import filters.TextSearchFilter;
+import filters.CuisineFilter;
+import filters.CalorieRangeFilter;
+import filters.PrepTimeFilter;
+import model.Ingredient;
 
 public class RecipeGUI extends JFrame {
     private List<Recipe> recipes;
     private List<Recipe> allRecipes;
+    private List<Recipe> addedRecipes;
     private Map<String, Object> userData;
     private JPanel recipeCardsPanel;
     private JPanel recipeDetailsPanel;
@@ -18,15 +31,24 @@ public class RecipeGUI extends JFrame {
     private JComboBox<String> calorieFilter;
     private JComboBox<String> prepTimeFilter;
     private RecipeNutritionGUI nutritionGUI;
+    private List<IRecipeFilter> filters;
 
     public RecipeGUI(List<Recipe> recipes, Map<String, Object> userData) {
         this.userData = userData;
         this.allRecipes = new ArrayList<>(recipes); // Create defensive copy
         this.recipes = new ArrayList<>(recipes);
+        this.addedRecipes = new ArrayList<>();
+
+        // Initialize filters
+        this.filters = new ArrayList<>();
+        filters.add(new TextSearchFilter());
+        filters.add(new CuisineFilter());
+        filters.add(new CalorieRangeFilter());
+        filters.add(new PrepTimeFilter());
 
         setTitle("Shopping APP");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setMinimumSize(new Dimension(800, 600)); // Set minimum window size
+        setMinimumSize(new Dimension(1300, 1000)); // Set minimum window size
         setLayout(new BorderLayout(10, 10));
 
         // Initialize nutrition GUI
@@ -48,6 +70,113 @@ public class RecipeGUI extends JFrame {
         
         // Center the window
         setLocationRelativeTo(null);
+    }
+
+    private void filterAndDisplayRecipes() {
+        String searchText = searchField.getText().toLowerCase();
+        String selectedCuisine = (String) cuisineFilter.getSelectedItem();
+        String selectedCalorieRange = (String) calorieFilter.getSelectedItem();
+        String selectedPrepTimeRange = (String) prepTimeFilter.getSelectedItem();
+
+        List<Recipe> filteredRecipes = new ArrayList<>(allRecipes);
+
+        // Apply text search filter
+        filteredRecipes = filteredRecipes.stream()
+            .filter(recipe -> filters.get(0).matches(recipe, searchText))
+            .collect(Collectors.toList());
+
+        // Apply cuisine filter
+        filteredRecipes = filteredRecipes.stream()
+            .filter(recipe -> filters.get(1).matches(recipe, selectedCuisine))
+            .collect(Collectors.toList());
+
+        // Apply calorie range filter
+        filteredRecipes = filteredRecipes.stream()
+            .filter(recipe -> filters.get(2).matches(recipe, selectedCalorieRange))
+            .collect(Collectors.toList());
+
+        // Apply prep time filter
+        filteredRecipes = filteredRecipes.stream()
+            .filter(recipe -> filters.get(3).matches(recipe, selectedPrepTimeRange))
+            .collect(Collectors.toList());
+
+        displayRecipeCards(filteredRecipes);
+    }
+
+    private boolean matchesFilters(Recipe recipe, String searchText, 
+                                 String cuisine, String calorieRange, String prepTimeRange) {
+        if (recipe == null) {
+            return false;
+        }
+
+        // Search text matching
+        boolean matchesSearch = searchText.isEmpty();
+        if (!matchesSearch) {
+            String searchLower = searchText.toLowerCase();
+            matchesSearch = recipe.getName().toLowerCase().contains(searchLower) ||
+                          recipe.getFlavor().toLowerCase().contains(searchLower) ||
+                          recipe.getCuisine().toLowerCase().contains(searchLower) ||
+                          recipe.getFlavorTags().stream()
+                              .anyMatch(tag -> tag.toLowerCase().contains(searchLower));
+        }
+
+        // Cuisine matching - more lenient comparison
+        boolean matchesCuisine = true;
+        if (!"All".equalsIgnoreCase(cuisine)) {
+            String recipeCuisine = recipe.getCuisine().toLowerCase().trim();
+            String selectedCuisine = cuisine.toLowerCase().trim();
+            matchesCuisine = recipeCuisine.contains(selectedCuisine) || selectedCuisine.contains(recipeCuisine);
+        }
+
+        // Calorie range matching
+        boolean matchesCalories = matchesCalorieRange(recipe.getCalories(), calorieRange);
+
+        // Prep time matching
+        boolean matchesPrepTime = matchesPrepTimeRange(recipe.getPrepTime(), prepTimeRange);
+
+        return matchesSearch && matchesCuisine && matchesCalories && matchesPrepTime;
+    }
+
+    private boolean matchesCalorieRange(int calories, String range) {
+        if ("All".equals(range)) return true;
+        
+        try {
+            switch (range) {
+                case "0-300":
+                    return calories >= 0 && calories <= 300;
+                case "301-600":
+                    return calories >= 301 && calories <= 600;
+                case "601-900":
+                    return calories >= 601 && calories <= 900;
+                case "901+":
+                    return calories >= 901;
+                default:
+                    return true;
+            }
+        } catch (Exception e) {
+            return true;
+        }
+    }
+
+    private boolean matchesPrepTimeRange(int prepTime, String range) {
+        if ("All".equals(range)) return true;
+        
+        try {
+            switch (range) {
+                case "0-15 min":
+                    return prepTime >= 0 && prepTime <= 15;
+                case "16-30 min":
+                    return prepTime >= 16 && prepTime <= 30;
+                case "31-45 min":
+                    return prepTime >= 31 && prepTime <= 45;
+                case "46+ min":
+                    return prepTime >= 46;
+                default:
+                    return true;
+            }
+        } catch (Exception e) {
+            return true;
+        }
     }
 
     private JPanel createLeftPanel() {
@@ -213,100 +342,6 @@ public class RecipeGUI extends JFrame {
         filterAndDisplayRecipes();
     }
 
-    private void filterAndDisplayRecipes() {
-        String searchText = searchField.getText().toLowerCase();
-        String selectedCuisine = (String) cuisineFilter.getSelectedItem();
-        String selectedCalorieRange = (String) calorieFilter.getSelectedItem();
-        String selectedPrepTimeRange = (String) prepTimeFilter.getSelectedItem();
-
-        List<Recipe> filteredRecipes = new ArrayList<>();
-        
-        for (Recipe recipe : allRecipes) {
-            if (matchesFilters(recipe, searchText, selectedCuisine, 
-                             selectedCalorieRange, selectedPrepTimeRange)) {
-                filteredRecipes.add(recipe);
-            }
-        }
-
-        displayRecipeCards(filteredRecipes);
-    }
-
-    private boolean matchesFilters(Recipe recipe, String searchText, 
-                                 String cuisine, String calorieRange, String prepTimeRange) {
-        if (recipe == null) {
-            return false;
-        }
-
-        // Search text matching
-        boolean matchesSearch = searchText.isEmpty();
-        if (!matchesSearch) {
-            String searchLower = searchText.toLowerCase();
-            matchesSearch = recipe.getName().toLowerCase().contains(searchLower) ||
-                          recipe.getFlavor().toLowerCase().contains(searchLower) ||
-                          recipe.getCuisine().toLowerCase().contains(searchLower) ||
-                          recipe.getFlavorTags().stream()
-                              .anyMatch(tag -> tag.toLowerCase().contains(searchLower));
-        }
-
-        // Cuisine matching - more lenient comparison
-        boolean matchesCuisine = true;
-        if (!"All".equalsIgnoreCase(cuisine)) {
-            String recipeCuisine = recipe.getCuisine().toLowerCase().trim();
-            String selectedCuisine = cuisine.toLowerCase().trim();
-            matchesCuisine = recipeCuisine.contains(selectedCuisine) || selectedCuisine.contains(recipeCuisine);
-        }
-
-        // Calorie range matching
-        boolean matchesCalories = matchesCalorieRange(recipe.getCalories(), calorieRange);
-
-        // Prep time matching
-        boolean matchesPrepTime = matchesPrepTimeRange(recipe.getPrepTime(), prepTimeRange);
-
-        return matchesSearch && matchesCuisine && matchesCalories && matchesPrepTime;
-    }
-
-    private boolean matchesCalorieRange(int calories, String range) {
-        if ("All".equals(range)) return true;
-        
-        try {
-            switch (range) {
-                case "0-300":
-                    return calories >= 0 && calories <= 300;
-                case "301-600":
-                    return calories >= 301 && calories <= 600;
-                case "601-900":
-                    return calories >= 601 && calories <= 900;
-                case "901+":
-                    return calories >= 901;
-                default:
-                    return true;
-            }
-        } catch (Exception e) {
-            return true;
-        }
-    }
-
-    private boolean matchesPrepTimeRange(int prepTime, String range) {
-        if ("All".equals(range)) return true;
-        
-        try {
-            switch (range) {
-                case "0-15 min":
-                    return prepTime >= 0 && prepTime <= 15;
-                case "16-30 min":
-                    return prepTime >= 16 && prepTime <= 30;
-                case "31-45 min":
-                    return prepTime >= 31 && prepTime <= 45;
-                case "46+ min":
-                    return prepTime >= 46;
-                default:
-                    return true;
-            }
-        } catch (Exception e) {
-            return true;
-        }
-    }
-
     private void displayRecipeCards(List<Recipe> recipes) {
         recipeCardsPanel.removeAll();
         
@@ -439,46 +474,45 @@ public class RecipeGUI extends JFrame {
 
         // Add to shopping list button
         JButton addButton = new JButton("Add to Shopping List");
-        addButton.addActionListener(e -> addRecipeToShoppingList(recipe));
+        addButton.addActionListener(e -> addRecipe(recipe));
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.add(addButton);
         recipeDetailsPanel.add(buttonPanel, BorderLayout.SOUTH);
-
-        // Update nutrition display
-        if (nutritionGUI != null) {
-            nutritionGUI.updateNutritionDisplay(recipe);
-        }
 
         recipeDetailsPanel.revalidate();
         recipeDetailsPanel.repaint();
     }
 
-    private void addRecipeToShoppingList(Recipe recipe) {
-        // TODO: Implement shopping list functionality
-        JOptionPane.showMessageDialog(this,
-            "Recipe added to shopping list: " + recipe.getName(),
-            "Added to Shopping List",
-            JOptionPane.INFORMATION_MESSAGE);
+    private void addRecipe(Recipe recipe) {
+        if (recipe != null) {
+            addedRecipes.add(recipe);
+            nutritionGUI.addRecipe(recipe);
+            JOptionPane.showMessageDialog(this,
+                "Recipe added to shopping list: " + recipe.getName(),
+                "Added to Shopping List",
+                JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     private JPanel createRightPanel() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        recipeDetailsPanel = new JPanel(new BorderLayout(10, 10));
-        recipeDetailsPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-
-        // Add button
-        JButton addButton = new JButton("Add");
-        addButton.addActionListener(e -> {
-            if (selectedRecipe != null) {
-                addRecipeToShoppingList(selectedRecipe);
+        // Create top panel with Nutrition Summary button
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton nutritionButton = new JButton("Nutrition Summary");
+        nutritionButton.addActionListener(e -> {
+            if (!addedRecipes.isEmpty()) {
+                nutritionGUI.showDetailWindow();
+            } else {
+                JOptionPane.showMessageDialog(this, "Please add some recipes first", "No Recipes Added", JOptionPane.WARNING_MESSAGE);
             }
         });
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        buttonPanel.add(addButton);
+        topPanel.add(nutritionButton);
+        panel.add(topPanel, BorderLayout.NORTH);
 
-        panel.add(buttonPanel, BorderLayout.NORTH);
+        recipeDetailsPanel = new JPanel(new BorderLayout(10, 10));
+        recipeDetailsPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         panel.add(recipeDetailsPanel, BorderLayout.CENTER);
 
         return panel;

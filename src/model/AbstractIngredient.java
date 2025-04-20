@@ -1,3 +1,6 @@
+package model;
+
+
 /**
  * Abstract base class implementing common functionality for all ingredients.
  * Provides basic validation and standard methods for ingredient properties.

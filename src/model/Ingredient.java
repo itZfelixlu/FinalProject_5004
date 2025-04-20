@@ -1,8 +1,11 @@
+package model;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 /**
  * Concrete implementation of an ingredient with calorie modifications based on cooking methods.

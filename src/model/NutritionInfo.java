@@ -1,3 +1,5 @@
+package model;
+
 public class NutritionInfo {
   private final double protein;
   private final double fat;

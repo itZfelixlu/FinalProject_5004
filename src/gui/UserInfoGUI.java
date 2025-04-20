@@ -1,8 +1,14 @@
+package gui;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import model.Recipe;
+import java.io.IOException;
 
 public class UserInfoGUI extends JFrame {
   private JTextField ageField;
@@ -205,10 +211,59 @@ public class UserInfoGUI extends JFrame {
   }
 
   private void showRecipeGUI(Map<String, Object> userData) {
-    Main.showRecipeGUI(userData);
+    try {
+      // Get recipes directly
+      List<Recipe> recipes = getRecipesFromMain();
+      
+      // Create and show the RecipeGUI
+      SwingUtilities.invokeLater(() -> {
+        RecipeGUI recipeGUI = new RecipeGUI(recipes, userData);
+        recipeGUI.setVisible(true);
+        this.dispose(); // Close the UserInfoGUI
+      });
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(this,
+        "Error starting recipe GUI: " + e.getMessage(),
+        "Error",
+        JOptionPane.ERROR_MESSAGE);
+      e.printStackTrace();
+    }
+  }
+  
+  // Helper method to get recipes from Main using reflection
+  private List<Recipe> getRecipesFromMain() {
+    try {
+      // Use reflection to access Main's getRecipes method
+      Class<?> mainClass = Class.forName("Main");
+      java.lang.reflect.Method getRecipesMethod = mainClass.getMethod("getRecipes");
+      return (List<Recipe>) getRecipesMethod.invoke(null);
+    } catch (Exception e) {
+      System.err.println("Error accessing recipes: " + e.getMessage());
+      e.printStackTrace();
+      return new ArrayList<>(); // Return empty list if there's an error
+    }
   }
 
   public static void main(String[] args) {
-    Main.main(args);
+    SwingUtilities.invokeLater(() -> {
+      try {
+        // First, make sure recipes are loaded by calling Main's initialization
+        Class<?> mainClass = Class.forName("Main");
+        java.lang.reflect.Method initComponentsMethod = mainClass.getDeclaredMethod("initializeComponents");
+        initComponentsMethod.setAccessible(true); // Make private method accessible
+        initComponentsMethod.invoke(null);
+        
+        // Then show the UserInfoGUI
+        UserInfoGUI gui = new UserInfoGUI();
+        gui.setVisible(true);
+      } catch (Exception e) {
+        System.err.println("Error initializing application: " + e.getMessage());
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null,
+          "Error initializing application: " + e.getMessage(),
+          "Error",
+          JOptionPane.ERROR_MESSAGE);
+      }
+    });
   }
 } 

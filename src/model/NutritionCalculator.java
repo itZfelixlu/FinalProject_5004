@@ -1,9 +1,13 @@
+package model;
+
 import java.util.Map;
 import java.util.HashMap;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.File;
+
+
 
 public class NutritionCalculator {
   private Map<String, Map<String, NutritionInfo>> nutritionData;
@@ -112,6 +116,14 @@ public class NutritionCalculator {
       } else if (unit.equals("piece") || unit.equals("medium")) {
         // For pieces, use the quantity as is since nutrition data is per piece
         quantityInGrams = quantity;
+      }
+
+      // Special handling for ingredients that expand when cooked
+      String ingredientName = ingredient.getName().toLowerCase();
+      if (ingredientName.contains("pasta") || ingredientName.contains("noodle") || 
+          ingredientName.contains("rice") || ingredientName.contains("dough")) {
+        // These ingredients typically double in weight when cooked
+        quantityInGrams *= 2;
       }
 
       // Calculate nutrition per 100g

@@ -1,5 +1,8 @@
+package model;
+
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * Represents a recipe with ingredients, nutritional information and preparation details.

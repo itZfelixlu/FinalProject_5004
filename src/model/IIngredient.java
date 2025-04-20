@@ -1,3 +1,5 @@
+package model;
+
 /**
  * Interface for food ingredients in the meal planning system.
  * Defines methods for accessing and modifying ingredient properties including
