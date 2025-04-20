@@ -7,8 +7,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.File;
 
-
-
+/**
+ * A utility class for calculating nutritional information for recipes and meals.
+ * Handles unit conversions, cooking method modifications, and nutritional value calculations.
+ * Uses a comprehensive database of nutritional values and cooking method modifiers.
+ */
 public class NutritionCalculator {
   private Map<String, Map<String, NutritionInfo>> nutritionData;
   private Map<String, Double> cookingModifiers;
@@ -72,6 +75,14 @@ public class NutritionCalculator {
     return baseNutrition.multiply(quantity);
   }
 
+  /**
+   * Calculates the total nutritional information for a recipe, taking into account
+   * ingredient quantities, unit conversions, and cooking method modifications.
+   *
+   * @param recipe The recipe to calculate nutrition for
+   * @return A NutritionInfo object containing the total protein, fat, carbs, fiber,
+   *         sugar, and sodium for the recipe
+   */
   public NutritionInfo calculateNutritionForRecipe(Recipe recipe) {
     if (recipe == null) {
       System.out.println("Warning: Null recipe provided to calculateNutritionForRecipe");
@@ -204,6 +215,15 @@ public class NutritionCalculator {
     return null;
   }
 
+  /**
+   * Gets the cooking method modifier for a specific cooking method.
+   * Returns a multiplier that affects the nutritional values based on how the
+   * ingredient is cooked (e.g., frying increases calories, steaming preserves them).
+   *
+   * @param cookingMethod The cooking method to get the modifier for
+   * @return A double representing the multiplier for the cooking method
+   *         (1.0 for no change, >1.0 for increased values, <1.0 for decreased values)
+   */
   private double getCookingMethodModifier(String cookingMethod) {
     if (cookingMethod == null || cookingMethod.trim().isEmpty()) {
       return 1.0;
@@ -213,6 +233,14 @@ public class NutritionCalculator {
     return cookingModifiers.getOrDefault(normalizedMethod, 1.0);
   }
 
+  /**
+   * Calculates the total nutritional information for a meal consisting of multiple recipes.
+   * Aggregates the nutritional values from all recipes in the meal.
+   *
+   * @param meals A map of recipe names to Recipe objects representing the meal
+   * @return A NutritionInfo object containing the total protein, fat, carbs, fiber,
+   *         sugar, and sodium for the entire meal
+   */
   public NutritionInfo calculateNutritionForMeal(Map<String, Recipe> meals) {
     NutritionInfo totalNutrition = new NutritionInfo(0, 0, 0, 0, 0, 0);
 

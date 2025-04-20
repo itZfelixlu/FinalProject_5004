@@ -18,6 +18,11 @@ import filters.CalorieRangeFilter;
 import filters.PrepTimeFilter;
 import model.Ingredient;
 
+/**
+ * A graphical user interface for displaying and managing recipes.
+ * Provides functionality for searching, filtering, and viewing recipe details.
+ * Allows users to add recipes to their shopping cart and view nutritional information.
+ */
 public class RecipeGUI extends JFrame {
     private List<Recipe> recipes;
     private List<Recipe> allRecipes;
@@ -33,6 +38,12 @@ public class RecipeGUI extends JFrame {
     private RecipeNutritionGUI nutritionGUI;
     private List<IRecipeFilter> filters;
 
+    /**
+     * Constructs a new RecipeGUI with the specified list of recipes.
+     * Initializes the main window and all UI components.
+     *
+     * @param recipes List of recipes to display and manage
+     */
     public RecipeGUI(List<Recipe> recipes, Map<String, Object> userData) {
         this.userData = userData;
         this.allRecipes = new ArrayList<>(recipes); // Create defensive copy
@@ -72,6 +83,10 @@ public class RecipeGUI extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    /**
+     * Filters and displays recipes based on search text and selected filters.
+     * Updates the recipe list to show only matching recipes.
+     */
     private void filterAndDisplayRecipes() {
         String searchText = searchField.getText().toLowerCase();
         String selectedCuisine = (String) cuisineFilter.getSelectedItem();
@@ -281,6 +296,10 @@ public class RecipeGUI extends JFrame {
         return panel;
     }
 
+    /**
+     * Creates the search panel with search field and filter options.
+     * Includes category and cooking method filters.
+     */
     private JPanel createSearchPanel() {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
         searchField = new JTextField(20);
@@ -338,6 +357,10 @@ public class RecipeGUI extends JFrame {
         return panel;
     }
 
+    /**
+     * Performs a search based on the current search text and filters.
+     * Updates the recipe list with matching results.
+     */
     private void performSearch() {
         filterAndDisplayRecipes();
     }
@@ -417,6 +440,12 @@ public class RecipeGUI extends JFrame {
         return card;
     }
 
+    /**
+     * Creates the recipe details panel showing selected recipe information.
+     * Displays ingredients, instructions, and nutritional information.
+     *
+     * @param recipe The recipe to display details for
+     */
     private void displayRecipeDetails(Recipe recipe) {
         recipeDetailsPanel.removeAll();
         recipeDetailsPanel.setLayout(new BorderLayout(10, 10));
@@ -483,6 +512,12 @@ public class RecipeGUI extends JFrame {
         recipeDetailsPanel.repaint();
     }
 
+    /**
+     * Adds the selected recipe to the shopping cart.
+     * Opens the checkout window with the updated cart.
+     *
+     * @param recipe The recipe to add to the cart
+     */
     private void addRecipe(Recipe recipe) {
         if (recipe != null) {
             addedRecipes.add(recipe);

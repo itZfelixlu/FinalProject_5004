@@ -11,6 +11,11 @@ import model.Recipe;
 import model.Ingredient;
 import model.PriceCalculator;
 
+/**
+ * A graphical user interface for displaying and managing the shopping cart.
+ * Shows recipe details, ingredient lists, and total costs with tax calculations.
+ * Allows users to remove recipes and proceed to checkout.
+ */
 public class CheckoutGUI extends JFrame {
     private List<Recipe> selectedRecipes;
     private JPanel mainPanel;
@@ -24,6 +29,12 @@ public class CheckoutGUI extends JFrame {
     private static final Font PRICE_FONT = new Font("Arial", Font.BOLD, 15);
     private final PriceCalculator priceCalculator;
 
+    /**
+     * Constructs a new CheckoutGUI with the specified list of recipes.
+     * Initializes the price calculator and sets up the main window.
+     *
+     * @param selectedRecipes List of recipes to display in the shopping cart
+     */
     public CheckoutGUI(List<Recipe> selectedRecipes) {
         this.selectedRecipes = new ArrayList<>(selectedRecipes); // Create a mutable copy
         this.priceCalculator = new PriceCalculator();
@@ -51,6 +62,10 @@ public class CheckoutGUI extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    /**
+     * Refreshes the entire display, updating all panels and calculations.
+     * Called when recipes are added or removed from the cart.
+     */
     private void refreshDisplay() {
         mainPanel.removeAll();
         createHeader();
@@ -61,6 +76,9 @@ public class CheckoutGUI extends JFrame {
         mainPanel.repaint();
     }
 
+    /**
+     * Creates the header panel with the shopping cart title.
+     */
     private void createHeader() {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(BACKGROUND_COLOR);
@@ -74,6 +92,10 @@ public class CheckoutGUI extends JFrame {
         mainPanel.add(headerPanel);
     }
 
+    /**
+     * Creates the recipe list panel showing all selected recipes.
+     * Displays recipe names, prices, and remove buttons.
+     */
     private void createRecipeList() {
         // Create a map to consolidate ingredients
         Map<String, Double> consolidatedIngredients = new HashMap<>();
@@ -199,6 +221,13 @@ public class CheckoutGUI extends JFrame {
         }
     }
 
+    /**
+     * Creates the consolidated ingredients panel showing combined quantities
+     * and prices for ingredients used across multiple recipes.
+     *
+     * @param ingredients Map of ingredient names to total quantities
+     * @param prices Map of ingredient names to total prices
+     */
     private void createConsolidatedPanel(Map<String, Double> ingredients, Map<String, Double> prices) {
         JPanel consolidatedPanel = new JPanel();
         consolidatedPanel.setLayout(new BoxLayout(consolidatedPanel, BoxLayout.Y_AXIS));
@@ -245,6 +274,10 @@ public class CheckoutGUI extends JFrame {
         mainPanel.add(consolidatedPanel);
     }
 
+    /**
+     * Creates the total panel showing the price breakdown including
+     * subtotal, tax, and final total.
+     */
     private void createTotalPanel() {
         JPanel totalPanel = new JPanel();
         totalPanel.setLayout(new BoxLayout(totalPanel, BoxLayout.Y_AXIS));
@@ -306,6 +339,9 @@ public class CheckoutGUI extends JFrame {
         mainPanel.add(totalPanel);
     }
 
+    /**
+     * Creates the checkout button panel with the proceed to checkout button.
+     */
     private void createCheckoutButton() {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.setBackground(BACKGROUND_COLOR);
@@ -330,6 +366,13 @@ public class CheckoutGUI extends JFrame {
         mainPanel.add(buttonPanel);
     }
 
+    /**
+     * Calculates the total cost of ingredients for a recipe.
+     * Uses the price calculator to determine the cost.
+     *
+     * @param recipe The recipe to calculate the cost for
+     * @return The total cost of the recipe's ingredients
+     */
     private double calculateIngredientCost(Recipe recipe) {
         return priceCalculator.calculateRecipePrice(recipe);
     }
