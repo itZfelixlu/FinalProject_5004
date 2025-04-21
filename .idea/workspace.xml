@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="e15aa008-8c67-4323-8bbc-e9a48f0a66f8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinalProject.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/FinalProject_5004/AbstractIngredient.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/FinalProject_5004/IIngredient.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/FinalProject_5004/Ingredient.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/FinalProject_5004/JSONParser.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/FinalProject_5004/Recipe.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gui/UserInfoGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/UserInfoGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinalProject_5004.iml" beforeDir="false" afterPath="$PROJECT_DIR$/FinalProject_5004.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/test/FinalProject_5004/IngredientTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/IngredientTest.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +42,12 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;JUnit.NutritionCalculatorTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.UserCalculatorTest.executor&quot;: &quot;Run&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
@@ -50,7 +55,7 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;
   }
 }</component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.UserCalculatorTest">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="FinalProject_5004" />
@@ -58,8 +63,38 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="NutritionCalculatorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinalProject_5004" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="NutritionCalculatorTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="NutritionInfoTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinalProject_5004" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="NutritionInfoTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserCalculatorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FinalProject_5004" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="UserCalculatorTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.UserCalculatorTest" />
+        <item itemvalue="JUnit.NutritionInfoTest" />
+        <item itemvalue="JUnit.NutritionCalculatorTest" />
         <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
