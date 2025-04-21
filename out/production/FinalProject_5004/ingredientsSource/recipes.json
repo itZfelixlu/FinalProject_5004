@@ -1,0 +1,758 @@
+[
+  {
+    "name": "Spaghetti Bolognese",
+    "flavor": "savory",
+    "flavorTags": ["heavy", "rich", "umami", "meaty"],
+    "cuisine": "italian",
+    "prepTime": 45,
+    "ingredients": [
+      {
+        "name": "Ground Beef (80/20)",
+        "quantity": 150,
+        "unit": "g",
+        "caloriesPerUnit": 254,
+        "pricePerUnit": 6.49,
+        "category": "meat",
+        "cookingMethod": "fried"
+      },
+      {
+        "name": "Tomato",
+        "quantity": 150,
+        "unit": "g",
+        "caloriesPerUnit": 18,
+        "pricePerUnit": 3.49,
+        "category": "vegetable",
+        "cookingMethod": "raw"
+      },
+      {
+        "name": "Olive Oil",
+        "quantity": 15,
+        "unit": "ml",
+        "caloriesPerUnit": 119,
+        "pricePerUnit": 0.45,
+        "category": "seasoning",
+        "cookingMethod": "raw"
+      }
+    ]
+  },
+  {
+    "name": "Chicken Stir Fry",
+    "flavor": "savory",
+    "flavorTags": ["light", "fresh", "crisp", "balanced"],
+    "cuisine": "chinese",
+    "prepTime": 30,
+    "ingredients": [
+      {
+        "name": "Chicken Breast",
+        "quantity": 120,
+        "unit": "g",
+        "caloriesPerUnit": 165,
+        "pricePerUnit": 4.29,
+        "category": "meat",
+        "cookingMethod": "fried"
+      },
+      {
+        "name": "Broccoli",
+        "quantity": 100,
+        "unit": "g",
+        "caloriesPerUnit": 34,
+        "pricePerUnit": 2.49,
+        "category": "vegetable",
+        "cookingMethod": "steamed"
+      },
+      {
+        "name": "Soy Sauce",
+        "quantity": 15,
+        "unit": "ml",
+        "caloriesPerUnit": 9,
+        "pricePerUnit": 0.20,
+        "category": "seasoning",
+        "cookingMethod": "raw"
+      }
+    ]
+  },
+  {
+    "name": "Greek Salad",
+    "flavor": "fresh",
+    "flavorTags": ["light", "refreshing", "tangy", "crisp"],
+    "cuisine": "greek",
+    "prepTime": 15,
+    "ingredients": [
+      {
+        "name": "Cucumber",
+        "quantity": 0.5,
+        "unit": "piece",
+        "caloriesPerUnit": 15,
+        "pricePerUnit": 2.29,
+        "category": "vegetable",
+        "cookingMethod": "raw"
+      },
+      {
+        "name": "Tomato",
+        "quantity": 1,
+        "unit": "piece",
+        "caloriesPerUnit": 18,
+        "pricePerUnit": 3.49,
+        "category": "vegetable",
+        "cookingMethod": "raw"
+      },
+      {
+        "name": "Cheddar Cheese",
+        "quantity": 30,
+        "unit": "g",
+        "caloriesPerUnit": 402,
+        "pricePerUnit": 8.99,
+        "category": "dairy",
+        "cookingMethod": "raw"
+      }
+    ]
+  },
+  {
+    "name": "Beef Tacos",
+    "flavor": "spicy",
+    "flavorTags": ["bold", "spicy", "hearty", "savory"],
+    "cuisine": "mexican",
+    "prepTime": 25,
+    "ingredients": [
+      {
+        "name": "Ground Beef (80/20)",
+        "quantity": 120,
+        "unit": "g",
+        "caloriesPerUnit": 254,
+        "pricePerUnit": 6.49,
+        "category": "meat",
+        "cookingMethod": "fried"
+      },
+      {
+        "name": "Bell Pepper",
+        "quantity": 1,
+        "unit": "piece",
+        "caloriesPerUnit": 31,
+        "pricePerUnit": 3.99,
+        "category": "vegetable",
+        "cookingMethod": "raw"
+      },
+      {
+        "name": "Chili Powder",
+        "quantity": 1,
+        "unit": "tablespoon",
+        "caloriesPerUnit": 24,
+        "pricePerUnit": 0.45,
+        "category": "seasoning",
+        "cookingMethod": "raw"
+      }
+    ]
+  },
+  {
+    "name": "Fruit Smoothie",
+    "flavor": "sweet",
+    "flavorTags": ["light", "refreshing", "fruity", "sweet"],
+    "cuisine": "american",
+    "prepTime": 10,
+    "ingredients": [
+      {
+        "name": "Banana",
+        "quantity": 1,
+        "unit": "medium",
+        "caloriesPerUnit": 105,
+        "pricePerUnit": 0.69,
+        "category": "fruit",
+        "cookingMethod": "raw"
+      },
+      {
+        "name": "Strawberries",
+        "quantity": 0.5,
+        "unit": "cup",
+        "caloriesPerUnit": 49,
+        "pricePerUnit": 3.99,
+        "category": "fruit",
+        "cookingMethod": "raw"
+      },
+      {
+        "name": "Greek Yogurt",
+        "quantity": 50,
+        "unit": "g",
+        "caloriesPerUnit": 59,
+        "pricePerUnit": 1.59,
+        "category": "dairy",
+        "cookingMethod": "raw"
+      }
+    ]
+  },
+  {
+    "name": "Vegetable Curry",
+    "flavor": "spicy",
+    "flavorTags": ["spicy", "aromatic", "hearty", "rich"],
+    "cuisine": "indian",
+    "prepTime": 40,
+    "ingredients": [
+      {
+        "name": "potato",
+        "quantity": 100,
+        "unit": "g",
+        "caloriesPerUnit": 77,
+        "pricePerUnit": 1.29,
+        "category": "vegetable",
+        "cookingMethod": "boiled"
+      },
+      {
+        "name": "carrot",
+        "quantity": 100,
+        "unit": "g",
+        "caloriesPerUnit": 41,
+        "pricePerUnit": 0.99,
+        "category": "vegetable",
+        "cookingMethod": "boiled"
+      },
+      {
+        "name": "curry powder",
+        "quantity": 10,
+        "unit": "g",
+        "caloriesPerUnit": 20,
+        "pricePerUnit": 2.99,
+        "category": "seasoning",
+        "cookingMethod": "raw"
+      }
+    ]
+  },
+  {
+    "name": "Grilled Salmon",
+    "flavor": "savory",
+    "flavorTags": ["light", "fresh", "delicate", "balanced"],
+    "cuisine": "american",
+    "prepTime": 20,
+    "ingredients": [
+      {
+        "name": "Atlantic Salmon",
+        "quantity": 120,
+        "unit": "g",
+        "caloriesPerUnit": 208,
+        "pricePerUnit": 11.99,
+        "category": "meat",
+        "cookingMethod": "grilled"
+      },
+      {
+        "name": "Lemon",
+        "quantity": 0.5,
+        "unit": "piece",
+        "caloriesPerUnit": 17,
+        "pricePerUnit": 0.69,
+        "category": "fruit",
+        "cookingMethod": "raw"
+      },
+      {
+        "name": "Olive Oil",
+        "quantity": 10,
+        "unit": "ml",
+        "caloriesPerUnit": 119,
+        "pricePerUnit": 0.45,
+        "category": "seasoning",
+        "cookingMethod": "raw"
+      }
+    ]
+  },
+  {
+    "name": "Caprese Salad",
+    "flavor": "fresh",
+    "flavorTags": ["light", "fresh", "simple", "refreshing"],
+    "cuisine": "italian",
+    "prepTime": 15,
+    "ingredients": [
+      {
+        "name": "Tomato",
+        "quantity": 2,
+        "unit": "piece",
+        "caloriesPerUnit": 18,
+        "pricePerUnit": 3.49,
+        "category": "vegetable",
+        "cookingMethod": "raw"
+      },
+      {
+        "name": "Cheddar Cheese",
+        "quantity": 200,
+        "unit": "g",
+        "caloriesPerUnit": 402,
+        "pricePerUnit": 8.99,
+        "category": "dairy",
+        "cookingMethod": "raw"
+      },
+      {
+        "name": "Olive Oil",
+        "quantity": 15,
+        "unit": "ml",
+        "caloriesPerUnit": 119,
+        "pricePerUnit": 0.45,
+        "category": "seasoning",
+        "cookingMethod": "raw"
+      }
+    ]
+  },
+  {
+    "name": "Chicken Soup",
+    "flavor": "savory",
+    "flavorTags": ["comforting", "hearty", "warm", "balanced"],
+    "cuisine": "american",
+    "prepTime": 35,
+    "ingredients": [
+      {
+        "name": "Chicken Breast",
+        "quantity": 300,
+        "unit": "g",
+        "caloriesPerUnit": 165,
+        "pricePerUnit": 4.29,
+        "category": "meat",
+        "cookingMethod": "boiled"
+      },
+      {
+        "name": "Carrot",
+        "quantity": 100,
+        "unit": "g",
+        "caloriesPerUnit": 41,
+        "pricePerUnit": 1.79,
+        "category": "vegetable",
+        "cookingMethod": "boiled"
+      },
+      {
+        "name": "Onion",
+        "quantity": 1,
+        "unit": "piece",
+        "caloriesPerUnit": 40,
+        "pricePerUnit": 1.59,
+        "category": "vegetable",
+        "cookingMethod": "boiled"
+      }
+    ]
+  },
+  {
+    "name": "Fruit Salad",
+    "flavor": "sweet",
+    "flavorTags": ["light", "refreshing", "fruity", "sweet"],
+    "cuisine": "american",
+    "prepTime": 15,
+    "ingredients": [
+      {
+        "name": "Apple",
+        "quantity": 2,
+        "unit": "medium",
+        "caloriesPerUnit": 95,
+        "pricePerUnit": 1.29,
+        "category": "fruit",
+        "cookingMethod": "raw"
+      },
+      {
+        "name": "Orange",
+        "quantity": 2,
+        "unit": "medium",
+        "caloriesPerUnit": 62,
+        "pricePerUnit": 1.19,
+        "category": "fruit",
+        "cookingMethod": "raw"
+      },
+      {
+        "name": "Grapes",
+        "quantity": 1,
+        "unit": "cup",
+        "caloriesPerUnit": 104,
+        "pricePerUnit": 3.49,
+        "category": "fruit",
+        "cookingMethod": "raw"
+      }
+    ]
+  },
+  {
+    "name": "Margherita Pizza",
+    "flavor": "savory",
+    "flavorTags": ["simple", "balanced", "cheesy", "savory"],
+    "cuisine": "italian",
+    "prepTime": 30,
+    "ingredients": [
+      {
+        "name": "pizza dough",
+        "quantity": 250,
+        "unit": "g",
+        "caloriesPerUnit": 280,
+        "pricePerUnit": 2.99,
+        "category": "seasoning",
+        "cookingMethod": "baked"
+      },
+      {
+        "name": "tomato sauce",
+        "quantity": 100,
+        "unit": "ml",
+        "caloriesPerUnit": 30,
+        "pricePerUnit": 2.49,
+        "category": "vegetable",
+        "cookingMethod": "raw"
+      },
+      {
+        "name": "mozzarella",
+        "quantity": 150,
+        "unit": "g",
+        "caloriesPerUnit": 280,
+        "pricePerUnit": 3.99,
+        "category": "dairy",
+        "cookingMethod": "baked"
+      }
+    ]
+  },
+  {
+    "name": "Pad Thai",
+    "flavor": "savory",
+    "flavorTags": ["balanced", "nutty", "savory", "sweet"],
+    "cuisine": "thai",
+    "prepTime": 25,
+    "ingredients": [
+      {
+        "name": "rice noodles",
+        "quantity": 200,
+        "unit": "g",
+        "caloriesPerUnit": 190,
+        "pricePerUnit": 2.99,
+        "category": "seasoning",
+        "cookingMethod": "boiled"
+      },
+      {
+        "name": "chicken breast",
+        "quantity": 200,
+        "unit": "g",
+        "caloriesPerUnit": 165,
+        "pricePerUnit": 4.99,
+        "category": "meat",
+        "cookingMethod": "fried"
+      },
+      {
+        "name": "peanut",
+        "quantity": 50,
+        "unit": "g",
+        "caloriesPerUnit": 567,
+        "pricePerUnit": 3.99,
+        "category": "seasoning",
+        "cookingMethod": "raw"
+      }
+    ]
+  },
+  {
+    "name": "Miso Soup",
+    "flavor": "savory",
+    "flavorTags": ["light", "umami", "delicate", "balanced"],
+    "cuisine": "japanese",
+    "prepTime": 15,
+    "ingredients": [
+      {
+        "name": "tofu",
+        "quantity": 150,
+        "unit": "g",
+        "caloriesPerUnit": 76,
+        "pricePerUnit": 2.99,
+        "category": "dairy",
+        "cookingMethod": "boiled"
+      },
+      {
+        "name": "miso paste",
+        "quantity": 30,
+        "unit": "g",
+        "caloriesPerUnit": 40,
+        "pricePerUnit": 4.99,
+        "category": "seasoning",
+        "cookingMethod": "boiled"
+      },
+      {
+        "name": "seaweed",
+        "quantity": 10,
+        "unit": "g",
+        "caloriesPerUnit": 35,
+        "pricePerUnit": 3.99,
+        "category": "vegetable",
+        "cookingMethod": "boiled"
+      }
+    ]
+  },
+  {
+    "name": "Beef Bulgogi",
+    "flavor": "savory",
+    "flavorTags": ["sweet", "savory", "rich", "umami"],
+    "cuisine": "korean",
+    "prepTime": 40,
+    "ingredients": [
+      {
+        "name": "beef sirloin",
+        "quantity": 300,
+        "unit": "g",
+        "caloriesPerUnit": 250,
+        "pricePerUnit": 8.99,
+        "category": "meat",
+        "cookingMethod": "fried"
+      },
+      {
+        "name": "soy sauce",
+        "quantity": 50,
+        "unit": "ml",
+        "caloriesPerUnit": 10,
+        "pricePerUnit": 3.99,
+        "category": "seasoning",
+        "cookingMethod": "raw"
+      },
+      {
+        "name": "sesame oil",
+        "quantity": 15,
+        "unit": "ml",
+        "caloriesPerUnit": 120,
+        "pricePerUnit": 4.99,
+        "category": "seasoning",
+        "cookingMethod": "raw"
+      }
+    ]
+  },
+  {
+    "name": "Ratatouille",
+    "flavor": "savory",
+    "flavorTags": ["light", "fresh", "herby", "balanced"],
+    "cuisine": "french",
+    "prepTime": 45,
+    "ingredients": [
+      {
+        "name": "eggplant",
+        "quantity": 1,
+        "unit": "piece",
+        "caloriesPerUnit": 25,
+        "pricePerUnit": 1.99,
+        "category": "vegetable",
+        "cookingMethod": "baked"
+      },
+      {
+        "name": "zucchini",
+        "quantity": 2,
+        "unit": "piece",
+        "caloriesPerUnit": 17,
+        "pricePerUnit": 1.49,
+        "category": "vegetable",
+        "cookingMethod": "baked"
+      },
+      {
+        "name": "tomato",
+        "quantity": 3,
+        "unit": "piece",
+        "caloriesPerUnit": 22,
+        "pricePerUnit": 0.79,
+        "category": "vegetable",
+        "cookingMethod": "baked"
+      }
+    ]
+  },
+  {
+    "name": "Chicken Caesar Salad",
+    "flavor": "savory",
+    "flavorTags": ["light", "fresh", "creamy", "balanced"],
+    "cuisine": "american",
+    "prepTime": 20,
+    "ingredients": [
+      {
+        "name": "chicken breast",
+        "quantity": 200,
+        "unit": "g",
+        "caloriesPerUnit": 165,
+        "pricePerUnit": 4.99,
+        "category": "meat",
+        "cookingMethod": "grilled"
+      },
+      {
+        "name": "romaine lettuce",
+        "quantity": 200,
+        "unit": "g",
+        "caloriesPerUnit": 15,
+        "pricePerUnit": 1.99,
+        "category": "vegetable",
+        "cookingMethod": "raw"
+      },
+      {
+        "name": "parmesan cheese",
+        "quantity": 50,
+        "unit": "g",
+        "caloriesPerUnit": 431,
+        "pricePerUnit": 4.99,
+        "category": "dairy",
+        "cookingMethod": "raw"
+      }
+    ]
+  },
+  {
+    "name": "Beef Pho",
+    "flavor": "savory",
+    "flavorTags": ["aromatic", "hearty", "balanced", "umami"],
+    "cuisine": "vietnamese",
+    "prepTime": 60,
+    "ingredients": [
+      {
+        "name": "beef sirloin",
+        "quantity": 200,
+        "unit": "g",
+        "caloriesPerUnit": 250,
+        "pricePerUnit": 8.99,
+        "category": "meat",
+        "cookingMethod": "boiled"
+      },
+      {
+        "name": "rice noodles",
+        "quantity": 200,
+        "unit": "g",
+        "caloriesPerUnit": 190,
+        "pricePerUnit": 2.99,
+        "category": "seasoning",
+        "cookingMethod": "boiled"
+      },
+      {
+        "name": "bean sprouts",
+        "quantity": 100,
+        "unit": "g",
+        "caloriesPerUnit": 30,
+        "pricePerUnit": 1.99,
+        "category": "vegetable",
+        "cookingMethod": "raw"
+      }
+    ]
+  },
+  {
+    "name": "Hummus",
+    "flavor": "savory",
+    "flavorTags": ["creamy", "nutty", "balanced", "rich"],
+    "cuisine": "middle eastern",
+    "prepTime": 15,
+    "ingredients": [
+      {
+        "name": "chickpeas",
+        "quantity": 400,
+        "unit": "g",
+        "caloriesPerUnit": 164,
+        "pricePerUnit": 1.99,
+        "category": "vegetable",
+        "cookingMethod": "boiled"
+      },
+      {
+        "name": "tahini",
+        "quantity": 50,
+        "unit": "g",
+        "caloriesPerUnit": 178,
+        "pricePerUnit": 4.99,
+        "category": "seasoning",
+        "cookingMethod": "raw"
+      },
+      {
+        "name": "lemon",
+        "quantity": 1,
+        "unit": "piece",
+        "caloriesPerUnit": 17,
+        "pricePerUnit": 0.69,
+        "category": "fruit",
+        "cookingMethod": "raw"
+      }
+    ]
+  },
+  {
+    "name": "Chicken Tikka Masala",
+    "flavor": "spicy",
+    "flavorTags": ["spicy", "creamy", "rich", "aromatic"],
+    "cuisine": "indian",
+    "prepTime": 50,
+    "ingredients": [
+      {
+        "name": "chicken breast",
+        "quantity": 400,
+        "unit": "g",
+        "caloriesPerUnit": 165,
+        "pricePerUnit": 4.99,
+        "category": "meat",
+        "cookingMethod": "fried"
+      },
+      {
+        "name": "yogurt",
+        "quantity": 200,
+        "unit": "ml",
+        "caloriesPerUnit": 100,
+        "pricePerUnit": 1.99,
+        "category": "dairy",
+        "cookingMethod": "raw"
+      },
+      {
+        "name": "curry powder",
+        "quantity": 20,
+        "unit": "g",
+        "caloriesPerUnit": 20,
+        "pricePerUnit": 2.99,
+        "category": "seasoning",
+        "cookingMethod": "raw"
+      }
+    ]
+  },
+  {
+    "name": "Sushi Roll",
+    "flavor": "savory",
+    "flavorTags": ["light", "fresh", "delicate", "balanced"],
+    "cuisine": "japanese",
+    "prepTime": 30,
+    "ingredients": [
+      {
+        "name": "sushi rice",
+        "quantity": 200,
+        "unit": "g",
+        "caloriesPerUnit": 130,
+        "pricePerUnit": 2.99,
+        "category": "seasoning",
+        "cookingMethod": "boiled"
+      },
+      {
+        "name": "salmon fillet",
+        "quantity": 100,
+        "unit": "g",
+        "caloriesPerUnit": 208,
+        "pricePerUnit": 8.99,
+        "category": "meat",
+        "cookingMethod": "raw"
+      },
+      {
+        "name": "seaweed",
+        "quantity": 2,
+        "unit": "piece",
+        "caloriesPerUnit": 35,
+        "pricePerUnit": 3.99,
+        "category": "vegetable",
+        "cookingMethod": "raw"
+      }
+    ]
+  },
+  {
+    "name": "Vegetable Stir Fry",
+    "flavor": "savory",
+    "flavorTags": ["light", "fresh", "crisp", "balanced"],
+    "cuisine": "chinese",
+    "prepTime": 20,
+    "ingredients": [
+      {
+        "name": "Broccoli",
+        "quantity": 200,
+        "unit": "g",
+        "caloriesPerUnit": 34,
+        "pricePerUnit": 2.49,
+        "category": "vegetable",
+        "cookingMethod": "fried"
+      },
+      {
+        "name": "Bell Pepper",
+        "quantity": 1,
+        "unit": "piece",
+        "caloriesPerUnit": 31,
+        "pricePerUnit": 3.99,
+        "category": "vegetable",
+        "cookingMethod": "fried"
+      },
+      {
+        "name": "Soy Sauce",
+        "quantity": 30,
+        "unit": "ml",
+        "caloriesPerUnit": 9,
+        "pricePerUnit": 0.20,
+        "category": "seasoning",
+        "cookingMethod": "raw"
+      }
+    ]
+  }
+]

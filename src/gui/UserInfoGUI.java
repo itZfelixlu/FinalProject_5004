@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
 import model.Recipe;
+import model.UserCalculator;
 import java.io.IOException;
 
 public class UserInfoGUI extends JFrame {
@@ -19,8 +20,10 @@ public class UserInfoGUI extends JFrame {
   private JLabel bmrLabel;
   private JLabel tdeeLabel;
   private JButton continueButton;
+  private UserCalculator userCalculator;
 
   public UserInfoGUI() {
+    userCalculator = new UserCalculator();
     setTitle("User Information");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setSize(500, 400);
@@ -137,15 +140,9 @@ public class UserInfoGUI extends JFrame {
         double height = Double.parseDouble(heightField.getText());
         double weight = Double.parseDouble(weightField.getText());
         boolean isMale = genderCombo.getSelectedItem().equals("Male");
-        double bmr = calculateBMR(age, height, weight, isMale);
-        double tdee = calculateTDEE(bmr, (String) activityLevelCombo.getSelectedItem());
+        String activityLevel = (String) activityLevelCombo.getSelectedItem();
 
-        userData.put("age", age);
-        userData.put("height", height);
-        userData.put("weight", weight);
-        userData.put("isMale", isMale);
-        userData.put("bmr", bmr);
-        userData.put("tdee", tdee);
+        userData = userCalculator.calculateAllUserData(age, height, weight, isMale, activityLevel);
     } catch (NumberFormatException e) {
         JOptionPane.showMessageDialog(this, 
             "Invalid input values. Please check your entries.", 
@@ -163,11 +160,9 @@ public class UserInfoGUI extends JFrame {
       boolean isMale = genderCombo.getSelectedItem().equals("Male");
       String activityLevel = (String) activityLevelCombo.getSelectedItem();
 
-      // Calculate BMR using Mifflin-St Jeor Equation
-      double bmr = calculateBMR(age, height, weight, isMale);
-
-      // Calculate TDEE based on activity level
-      double tdee = calculateTDEE(bmr, activityLevel);
+      Map<String, Object> userData = userCalculator.calculateAllUserData(age, height, weight, isMale, activityLevel);
+      double bmr = (double) userData.get("bmr");
+      double tdee = (double) userData.get("tdee");
 
       // Update labels
       bmrLabel.setText(String.format("BMR: %.2f calories/day", bmr));
@@ -182,32 +177,6 @@ public class UserInfoGUI extends JFrame {
           "Input Error", 
           JOptionPane.ERROR_MESSAGE);
     }
-  }
-
-  private double calculateBMR(int age, double height, double weight, boolean isMale) {
-    // Mifflin-St Jeor Equation
-    if (isMale) {
-      return 10 * weight + 6.25 * height - 5 * age + 5;
-    } else {
-      return 10 * weight + 6.25 * height - 5 * age - 161;
-    }
-  }
-
-  private double calculateTDEE(double bmr, String activityLevel) {
-    // Activity multipliers
-    double multiplier = 1.2; // Default sedentary
-
-    if (activityLevel.contains("Lightly active")) {
-      multiplier = 1.375;
-    } else if (activityLevel.contains("Moderately active")) {
-      multiplier = 1.55;
-    } else if (activityLevel.contains("Very active")) {
-      multiplier = 1.725;
-    } else if (activityLevel.contains("Extra active")) {
-      multiplier = 1.9;
-    }
-
-    return bmr * multiplier;
   }
 
   private void showRecipeGUI(Map<String, Object> userData) {
