@@ -26,4 +26,4 @@ What Sets Us Apart:
 Unlike most apps that focus solely on calorie tracking or taste, our product seamlessly integrates both. This dual approach offers greater flexibility, balancing nutrition and enjoyment for a more personalized food experience.
 
 Class diagram:
-![Class Diagram for Food Online Shopping Tool](images/classDiagramInitial.png)
+![Class Diagram for Food Online Shopping Tool](images/ClassDiagram.png)
