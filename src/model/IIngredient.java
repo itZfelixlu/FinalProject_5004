@@ -83,10 +83,4 @@ public interface IIngredient {
    */
   String getCategory();
 
-  /**
-   * Gets formatted detailed information about the ingredient.
-   *
-   * @return Detailed ingredient information
-   */
-  String getDetailedInfo();
 }

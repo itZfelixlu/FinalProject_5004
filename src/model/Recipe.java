@@ -155,30 +155,6 @@ public class Recipe {
   }
 
   /**
-   * Gets formatted detailed information about the recipe.
-   *
-   * @return Detailed recipe information including ingredients
-   */
-  public String getDetailedInfo() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(String.format(
-        "Recipe: %s\n" +
-            "Total Calories: %d\n" +
-            "Flavor: %s\n" +
-            "Flavor Tags: %s\n" +
-            "Cuisine: %s\n" +
-            "Preparation Time: %d minutes\n" +
-            "Ingredients:\n",
-        name, getCalories(), flavor, String.join(", ", flavorTags), cuisine, prepTime));
-
-    for (Ingredient ingredient : ingredients) {
-      sb.append("- ").append(ingredient.toString()).append("\n");
-    }
-
-    return sb.toString();
-  }
-
-  /**
    * Gets formatted text of ingredients list.
    *
    * @return Formatted ingredients text

@@ -185,29 +185,6 @@ public class Ingredient extends AbstractIngredient {
     }
 
     /**
-     * Returns formatted detailed information about this ingredient.
-     *
-     * @return Formatted string with ingredient details
-     */
-    @Override
-    public String getDetailedInfo() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format(
-                "%s (%.2f %s, %s)\n" +
-                "Category: %s\n" +
-                "Cooking Method: %s\n" +
-                "Calories: %.2f per %s (%.2f modified)\n" +
-                "Price: $%.2f per %s ($%.2f total)\n" +
-                "Description: %s",
-                name, quantity, unit, cookingMethod,
-                category, cookingMethod,
-                (double) caloriesPerUnit, unit, getModifiedCaloriesPerUnit(),
-                pricePerUnit, unit, getTotalPrice(),
-                description));
-        return sb.toString();
-    }
-
-    /**
      * Loads ingredients from JSON files into category-based lists.
      * 
      * @throws IOException If errors occur reading JSON files
@@ -342,64 +319,9 @@ public class Ingredient extends AbstractIngredient {
                 return new ArrayList<>();
         }
     }
+
     
-    /**
-     * Gets an ingredient by name.
-     * 
-     * @param name Ingredient name
-     * @return Ingredient if found, null otherwise
-     */
-    public static Ingredient getIngredientByName(String name) {
-        String lowerName = name.toLowerCase();
-        
-        // Check all categories
-        for (Ingredient ingredient : meatIngredients) {
-            if (ingredient.getName().toLowerCase().equals(lowerName)) {
-                return createCopy(ingredient, 1);
-            }
-        }
-        
-        for (Ingredient ingredient : vegetableIngredients) {
-            if (ingredient.getName().toLowerCase().equals(lowerName)) {
-                return createCopy(ingredient, 1);
-            }
-        }
-        
-        for (Ingredient ingredient : fruitIngredients) {
-            if (ingredient.getName().toLowerCase().equals(lowerName)) {
-                return createCopy(ingredient, 1);
-            }
-        }
-        
-        for (Ingredient ingredient : dairyIngredients) {
-            if (ingredient.getName().toLowerCase().equals(lowerName)) {
-                return createCopy(ingredient, 1);
-            }
-        }
-        
-        for (Ingredient ingredient : seasoningIngredients) {
-            if (ingredient.getName().toLowerCase().equals(lowerName)) {
-                return createCopy(ingredient, 1);
-            }
-        }
-        
-        return null;
-    }
-    
-    /**
-     * Gets an ingredient by name with specified quantity.
-     * 
-     * @param name Ingredient name
-     * @param quantity Desired quantity
-     * @return Ingredient if found, null otherwise
-     */
-    public static Ingredient getIngredientByName(String name, double quantity) {
-        Ingredient ingredient = getIngredientByName(name);
-        if (ingredient != null) {
-            return createCopy(ingredient, quantity);
-        }
-        return null;
-    }
+
     
     /**
      * Creates a copy of an ingredient with a new quantity.

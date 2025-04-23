@@ -16,33 +16,6 @@ import java.util.ArrayList;
 public class NutritionCalculatorTest {
     private final NutritionCalculator calculator = new NutritionCalculator();
 
-    /**
-     * Tests the calculation of nutrition for a known ingredient.
-     */
-    @Test
-    public void testCalculateNutritionForIngredient() {
-        // Test with a known ingredient (Chicken Breast is in the database)
-        NutritionInfo info = calculator.calculateNutritionForIngredient("meat", "Chicken Breast", 100);
-        
-        assertNotNull(info, "Nutrition info should not be null");
-        assertTrue(info.getProtein() > 0, "Protein should be positive for chicken breast");
-        assertTrue(info.getCalories() > 0, "Calories should be positive for chicken breast");
-        
-        // Print actual values for debugging
-        System.out.println("Protein: " + info.getProtein());
-        System.out.println("Calories: " + info.getCalories());
-    }
-
-    /**
-     * Tests the calculation of nutrition for an unknown ingredient.
-     */
-    @Test
-    public void testCalculateNutritionForUnknownIngredient() {
-        NutritionInfo info = calculator.calculateNutritionForIngredient("Unknown", "Unknown", 100);
-        
-        assertEquals(0, info.getProtein(), 0.01, "Protein should be 0 for unknown ingredient");
-        assertEquals(0, info.getCalories(), 0.01, "Calories should be 0 for unknown ingredient");
-    }
 
     /**
      * Tests the calculation of nutrition for a simple recipe.

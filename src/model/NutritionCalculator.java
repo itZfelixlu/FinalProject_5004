@@ -60,21 +60,6 @@ public class NutritionCalculator {
     }
   }
 
-  public NutritionInfo calculateNutritionForIngredient(String category, String ingredient, double quantity) {
-    Map<String, NutritionInfo> categoryMap = nutritionData.get(category);
-    if (categoryMap == null) {
-      return new NutritionInfo(0, 0, 0, 0, 0, 0);
-    }
-
-    NutritionInfo baseNutrition = categoryMap.get(ingredient);
-    if (baseNutrition == null) {
-      return new NutritionInfo(0, 0, 0, 0, 0, 0);
-    }
-
-    // Adjust nutrition values based on quantity
-    return baseNutrition.multiply(quantity);
-  }
-
   /**
    * Calculates the total nutritional information for a recipe, taking into account
    * ingredient quantities, unit conversions, and cooking method modifications.
