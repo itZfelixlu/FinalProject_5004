@@ -95,103 +95,25 @@ public class RecipeGUI extends JFrame {
 
         List<Recipe> filteredRecipes = new ArrayList<>(allRecipes);
 
-        // Apply text search filter
-        filteredRecipes = filteredRecipes.stream()
-            .filter(recipe -> filters.get(0).matches(recipe, searchText))
-            .collect(Collectors.toList());
-
-        // Apply cuisine filter
-        filteredRecipes = filteredRecipes.stream()
-            .filter(recipe -> filters.get(1).matches(recipe, selectedCuisine))
-            .collect(Collectors.toList());
-
-        // Apply calorie range filter
-        filteredRecipes = filteredRecipes.stream()
-            .filter(recipe -> filters.get(2).matches(recipe, selectedCalorieRange))
-            .collect(Collectors.toList());
-
-        // Apply prep time filter
-        filteredRecipes = filteredRecipes.stream()
-            .filter(recipe -> filters.get(3).matches(recipe, selectedPrepTimeRange))
-            .collect(Collectors.toList());
+        // Apply all filters using the filter classes
+        for (IRecipeFilter filter : filters) {
+            filteredRecipes = filteredRecipes.stream()
+                .filter(recipe -> {
+                    if (filter instanceof TextSearchFilter) {
+                        return filter.matches(recipe, searchText);
+                    } else if (filter instanceof CuisineFilter) {
+                        return filter.matches(recipe, selectedCuisine);
+                    } else if (filter instanceof CalorieRangeFilter) {
+                        return filter.matches(recipe, selectedCalorieRange);
+                    } else if (filter instanceof PrepTimeFilter) {
+                        return filter.matches(recipe, selectedPrepTimeRange);
+                    }
+                    return true;
+                })
+                .collect(Collectors.toList());
+        }
 
         displayRecipeCards(filteredRecipes);
-    }
-
-    private boolean matchesFilters(Recipe recipe, String searchText, 
-                                 String cuisine, String calorieRange, String prepTimeRange) {
-        if (recipe == null) {
-            return false;
-        }
-
-        // Search text matching
-        boolean matchesSearch = searchText.isEmpty();
-        if (!matchesSearch) {
-            String searchLower = searchText.toLowerCase();
-            matchesSearch = recipe.getName().toLowerCase().contains(searchLower) ||
-                          recipe.getFlavor().toLowerCase().contains(searchLower) ||
-                          recipe.getCuisine().toLowerCase().contains(searchLower) ||
-                          recipe.getFlavorTags().stream()
-                              .anyMatch(tag -> tag.toLowerCase().contains(searchLower));
-        }
-
-        // Cuisine matching - more lenient comparison
-        boolean matchesCuisine = true;
-        if (!"All".equalsIgnoreCase(cuisine)) {
-            String recipeCuisine = recipe.getCuisine().toLowerCase().trim();
-            String selectedCuisine = cuisine.toLowerCase().trim();
-            matchesCuisine = recipeCuisine.contains(selectedCuisine) || selectedCuisine.contains(recipeCuisine);
-        }
-
-        // Calorie range matching
-        boolean matchesCalories = matchesCalorieRange(recipe.getCalories(), calorieRange);
-
-        // Prep time matching
-        boolean matchesPrepTime = matchesPrepTimeRange(recipe.getPrepTime(), prepTimeRange);
-
-        return matchesSearch && matchesCuisine && matchesCalories && matchesPrepTime;
-    }
-
-    private boolean matchesCalorieRange(int calories, String range) {
-        if ("All".equals(range)) return true;
-        
-        try {
-            switch (range) {
-                case "0-300":
-                    return calories >= 0 && calories <= 300;
-                case "301-600":
-                    return calories >= 301 && calories <= 600;
-                case "601-900":
-                    return calories >= 601 && calories <= 900;
-                case "901+":
-                    return calories >= 901;
-                default:
-                    return true;
-            }
-        } catch (Exception e) {
-            return true;
-        }
-    }
-
-    private boolean matchesPrepTimeRange(int prepTime, String range) {
-        if ("All".equals(range)) return true;
-        
-        try {
-            switch (range) {
-                case "0-15 min":
-                    return prepTime >= 0 && prepTime <= 15;
-                case "16-30 min":
-                    return prepTime >= 16 && prepTime <= 30;
-                case "31-45 min":
-                    return prepTime >= 31 && prepTime <= 45;
-                case "46+ min":
-                    return prepTime >= 46;
-                default:
-                    return true;
-            }
-        } catch (Exception e) {
-            return true;
-        }
     }
 
     private JPanel createLeftPanel() {

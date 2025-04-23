@@ -6,9 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="e15aa008-8c67-4323-8bbc-e9a48f0a66f8" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FinalProject_5004.iml" beforeDir="false" afterPath="$PROJECT_DIR$/FinalProject_5004.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/test/FinalProject_5004/IngredientTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/IngredientTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/FinalProject_5004/gui/RecipeGUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/FinalProject_5004/gui/RecipeGUI$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/FinalProject_5004/gui/RecipeGUI$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/FinalProject_5004/gui/RecipeGUI$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/FinalProject_5004/gui/RecipeGUI$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/FinalProject_5004/gui/RecipeGUI$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/FinalProject_5004/gui/RecipeGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/FinalProject_5004/gui/RecipeGUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gui/RecipeGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/RecipeGUI.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,6 +46,7 @@
     &quot;Application.Main.executor&quot;: &quot;Run&quot;,
     &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
     &quot;JUnit.NutritionCalculatorTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.NutritionInfoTest.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.UserCalculatorTest.executor&quot;: &quot;Run&quot;,
     &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
     &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
@@ -55,7 +58,7 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;
   }
 }</component>
-  <component name="RunManager" selected="JUnit.UserCalculatorTest">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="FinalProject_5004" />
@@ -92,10 +95,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
         <item itemvalue="JUnit.UserCalculatorTest" />
         <item itemvalue="JUnit.NutritionInfoTest" />
         <item itemvalue="JUnit.NutritionCalculatorTest" />
-        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
