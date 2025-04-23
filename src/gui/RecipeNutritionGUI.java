@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.ArrayList;
 import model.Recipe;
 import model.NutritionInfo;
-import model.NutritionCalculator;
 
 public class RecipeNutritionGUI {
   // Main summary panel (shown in RecipeGUI)
@@ -28,16 +27,13 @@ public class RecipeNutritionGUI {
   private double targetFat = 65.0;
   private double targetCarbs = 300.0;
 
-  private Recipe currentRecipe;  // Add this field to track current recipe
   private Map<String, Object> userData;
-  private NutritionCalculator nutritionCalculator;
 
   private JPanel recipeList;
   private List<Recipe> addedRecipes = new ArrayList<>();
 
   public RecipeNutritionGUI(Map<String, Object> userData) {
     this.userData = userData;
-    this.nutritionCalculator = new NutritionCalculator();
     createSummaryPanel();
     createDetailWindow();
 
@@ -280,10 +276,8 @@ public class RecipeNutritionGUI {
       double carbCalories = targetCalories - proteinCalories - fatCalories;
       targetCarbs = carbCalories / 4; // 4 calories per gram
 
-      // Update the display if a recipe is currently shown
-      if (currentRecipe != null) {
-        updateNutritionDisplay(currentRecipe);
-      }
+      // Update the display with combined nutrition of all recipes
+      updateNutritionDisplay();
     }
   }
 
@@ -298,15 +292,6 @@ public class RecipeNutritionGUI {
     }
 
     updateNutritionDisplay(recipe.getName(), recipe.getNutritionInfo());
-  }
-
-  public void updateNutritionDisplay(Recipe recipe, NutritionInfo nutrition) {
-    if (recipe == null || nutrition == null) {
-      System.out.println("Warning: Null recipe or nutrition info in updateNutritionDisplay");
-      return;
-    }
-
-    updateNutritionDisplay(recipe.getName(), nutrition);
   }
 
   private void updateNutritionDisplay(String name, NutritionInfo nutrition) {

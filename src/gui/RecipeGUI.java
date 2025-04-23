@@ -474,13 +474,4 @@ public class RecipeGUI extends JFrame {
 
         return panel;
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            List<Recipe> recipes = new ArrayList<>();
-            // Add sample recipes here
-            RecipeGUI gui = new RecipeGUI(recipes, null);
-            gui.setVisible(true);
-        });
-    }
 } 

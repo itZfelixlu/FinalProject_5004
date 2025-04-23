@@ -134,7 +134,7 @@ public class CheckoutGUI extends JFrame {
             priceRemovePanel.setBackground(Color.WHITE);
 
             // Calculate recipe ingredient cost
-            double ingredientCost = calculateIngredientCost(recipe);
+            double ingredientCost = priceCalculator.calculateRecipePrice(recipe);
             
             JPanel pricePanel = new JPanel(new GridLayout(2, 1));
             pricePanel.setBackground(Color.WHITE);
@@ -289,9 +289,7 @@ public class CheckoutGUI extends JFrame {
         totalPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         // Calculate totals
-        double subtotal = selectedRecipes.stream()
-            .mapToDouble(priceCalculator::calculateRecipePrice)
-            .sum();
+        double subtotal = calculateTotalCost();
         
         double tax = subtotal * 0.0825; // Assuming 8.25% sales tax
         double total = subtotal + tax;
@@ -366,14 +364,11 @@ public class CheckoutGUI extends JFrame {
         mainPanel.add(buttonPanel);
     }
 
-    /**
-     * Calculates the total cost of ingredients for a recipe.
-     * Uses the price calculator to determine the cost.
-     *
-     * @param recipe The recipe to calculate the cost for
-     * @return The total cost of the recipe's ingredients
-     */
-    private double calculateIngredientCost(Recipe recipe) {
-        return priceCalculator.calculateRecipePrice(recipe);
+    private double calculateTotalCost() {
+        double total = 0.0;
+        for (Recipe recipe : selectedRecipes) {
+            total += priceCalculator.calculateRecipePrice(recipe);
+        }
+        return total;
     }
 } 

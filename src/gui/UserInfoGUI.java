@@ -117,8 +117,21 @@ public class UserInfoGUI extends JFrame {
                 JOptionPane.WARNING_MESSAGE);
             return;
         }
-        Map<String, Object> userData = collectUserData();
-        showRecipeGUI(userData);
+        try {
+            int age = Integer.parseInt(ageField.getText());
+            double height = Double.parseDouble(heightField.getText());
+            double weight = Double.parseDouble(weightField.getText());
+            boolean isMale = genderCombo.getSelectedItem().equals("Male");
+            String activityLevel = (String) activityLevelCombo.getSelectedItem();
+
+            Map<String, Object> userData = userCalculator.calculateAllUserData(age, height, weight, isMale, activityLevel);
+            showRecipeGUI(userData);
+        } catch (NumberFormatException e1) {
+            JOptionPane.showMessageDialog(this, 
+                "Invalid input values. Please check your entries.", 
+                "Input Error", 
+                JOptionPane.ERROR_MESSAGE);
+        }
     });
 
     buttonPanel.add(calculateButton);
@@ -131,25 +144,6 @@ public class UserInfoGUI extends JFrame {
 
     // Center the window on screen
     setLocationRelativeTo(null);
-  }
-
-  private Map<String, Object> collectUserData() {
-    Map<String, Object> userData = new HashMap<>();
-    try {
-        int age = Integer.parseInt(ageField.getText());
-        double height = Double.parseDouble(heightField.getText());
-        double weight = Double.parseDouble(weightField.getText());
-        boolean isMale = genderCombo.getSelectedItem().equals("Male");
-        String activityLevel = (String) activityLevelCombo.getSelectedItem();
-
-        userData = userCalculator.calculateAllUserData(age, height, weight, isMale, activityLevel);
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, 
-            "Invalid input values. Please check your entries.", 
-            "Input Error", 
-            JOptionPane.ERROR_MESSAGE);
-    }
-    return userData;
   }
 
   private void calculateAndShowResults() {
